@@ -25,7 +25,8 @@
     porte: ['Muito pequeno', 'Pequeno', 'Médio', 'Grande', 'Gigante'],
     populacao: ['Muito pequena', 'Pequena', 'Média', 'Grande', 'Enorme'],
     preco: ['Popular', 'Intermediário', 'Caro', 'Luxo', 'Exótico'],
-    raridade: ['Muito comum', 'Comum', 'Incomum', 'Raro', 'Muito raro']
+    raridade: ['Muito comum', 'Comum', 'Incomum', 'Raro', 'Muito raro'],
+    intensidade: ['Muito baixa', 'Baixa', 'Média', 'Alta', 'Extrema']
   };
 
   /* ---------------------------------------------------------------------

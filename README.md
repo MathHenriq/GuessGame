@@ -1,8 +1,8 @@
 # 🎯 Guess Game
 
-Jogo educativo de dedução para a sala de aula, no estilo LoLdle/Wordle, com **28 categorias e 2.847 itens**
-— 19 categorias abrangentes (Filmes, Animais, Países…) e 9 universos temáticos
-(League of Legends, Pokémon, Naruto, Marvel, Futebol brasileiro…).
+Jogo educativo de dedução para a sala de aula, no estilo LoLdle/Wordle, com **50 categorias e 4.178 itens**
+— 37 categorias abrangentes (Elementos químicos, Corpo humano, Profissões, Objetos do dia a dia, Animais…)
+e 13 universos temáticos (League of Legends, Pokémon, Naruto, Marvel, Disney, Star Wars…).
 O aluno escolhe uma categoria, tenta adivinhar o item secreto e recebe um tabuleiro de peças coloridas
 comparando as características de cada palpite: 🟩 correto, 🟨 parcialmente correto, 🟥 errado.
 Ao acertar, o jogo mostra uma foto do item.
@@ -94,6 +94,7 @@ Nada mais precisa ser alterado.
 | `pais` | mesmo país | mesmo continente | o país precisa existir no mapa `GG.continentes` (em `nucleo/base.js`) |
 | `lista` | conjunto idêntico | ao menos um item em comum | valor é um array, ex.: `['Ação', 'Aventura']` |
 | `texto` | texto igual | alguma palavra em comum | usado para estúdio, autoria, posição, sabor... |
+| `numero` | mesmo número | dentro da `tolerancia` | igual ao `ano`, para grandezas que não são data (número atômico, lados de um polígono) |
 
 ---
 
@@ -290,18 +291,53 @@ assets/
       especificos-games.js     League of Legends, Pokémon, Minecraft
       especificos-animes.js    Naruto, One Piece, Dragon Ball
       especificos-cultura.js   Harry Potter, Marvel, Futebol brasileiro
+      expansao-pokemon.js      Completa a 1ª geração e os pedidos das demais
+      tema-ciencias.js         Elementos químicos, Corpo humano, Espaço, Dinossauros
+      tema-natureza.js         Plantas, Fenômenos naturais, Biomas, Formas geométricas
+      tema-sociedade.js        Estados do Brasil, Bandeiras, Línguas, Profissões
+      tema-cotidiano.js        Objetos, Meios de transporte, Roupas, Invenções
+      tema-cultura.js          Mitologia, Obras de arte
+      especificos-universos.js DC Comics, Star Wars, Senhor dos Anéis, Disney
       destaques.js             Quem entra nos sorteios de fácil e médio (carregar por último)
     ui/                        Interface, uma tela por arquivo
       comum.js, inicio.js, jogo.js, professor.js, ranking.js
     app.js                     Ponto de entrada
 ferramentas/
   validar-base.js              Validação da base de dados (Node.js, opcional)
+  importar-pokeapi.js          Traz a Pokédex completa da PokéAPI (Node.js, opcional)
 ```
 
 A separação é proposital: **`nucleo/` não conhece o DOM e `ui/` não conhece as regras**. Isso é o que
 permite trocar o armazenamento local por uma API sem reescrever o jogo.
 
 ---
+
+## Importar bases prontas (e por que quase nunca compensa)
+
+`ferramentas/importar-pokeapi.js` traz a Pokédex inteira da PokéAPI e gera um arquivo `.js`
+commitável:
+
+```bash
+node ferramentas/importar-pokeapi.js 1025    # a Pokédex completa
+node ferramentas/validar-base.js             # confere o resultado
+```
+
+A importação acontece **na sua máquina, uma vez** — nunca durante a partida. O jogo continua
+estático e offline; se dependesse de API em tempo real, uma queda do serviço viraria aula perdida.
+
+Antes de replicar isso para outras categorias, saiba o que a importação **não** resolve:
+
+1. **Escolher os atributos.** A PokéAPI devolve dezenas de campos por Pokémon; o jogo bom nasce de
+   escolher cinco. Isso é design, não importação.
+2. **Normalizar.** Altura em decímetros precisa virar porte de 1 a 5; nome em inglês precisa virar
+   nome em português.
+3. **Saber quem é famoso.** Nenhuma API tem campo de popularidade — e é justamente esse ranking que
+   decide o que é sorteado no Fácil e no Médio. Por isso o `destaques.js` continua sendo manual.
+
+Some-se a isso que os IDs dos itens são posicionais (`pokemon-42`) e viajam dentro do código de
+desafio do professor: reimportar uma base em ordem diferente invalida links já compartilhados.
+Por isso só o Pokémon tem importador — foi o caso em que a lista completa era realmente esperada
+pelos alunos.
 
 ## Acessibilidade e sala de aula
 
@@ -313,16 +349,23 @@ permite trocar o armazenamento local por uma API sem reescrever o jogo.
 
 ## Categorias incluídas
 
-**Abrangentes (19)** — 🍔 Comidas 175 · 🐾 Animais 169 · 🎮 Jogos 144 · 🎵 Músicos 136 ·
-🏢 Empresas 130 · 🎬 Filmes 123 · 🦸 Personagens 119 · 🌎 Países 118 · ⚽ Jogadores 115 ·
-🗺️ Lugares 105 · 🏛️ Personalidades históricas 103 · 📚 Livros 97 · 🎭 Atores 94 ·
-🔬 Cientistas 92 · 📺 Séries 91 · 🏀 Esportes 90 · 🧙 Animes 90 · 🚗 Carros 84 · 🎨 Artistas 70
+**Abrangentes (37)**
 
-**Universos temáticos (9)** — ⚡ Pokémon 129 · ⚔️ League of Legends 114 · ⛏️ Minecraft 91 ·
-🕷️ Marvel 78 · 🪄 Harry Potter 66 · 🍥 Naruto 61 · 🐉 Dragon Ball 57 · 🇧🇷 Futebol brasileiro 56 ·
-🏴‍☠️ One Piece 50
+🍔 Comidas 175 · 🐾 Animais 169 · 🎮 Jogos 144 · 🎵 Músicos 136 · 🏢 Empresas 130 · 🎬 Filmes 123 ·
+🦸 Personagens 119 · 🌎 Países 118 · ⚽ Jogadores 115 · 🗺️ Lugares 105 · 🏛️ Personalidades históricas 103 ·
+🪑 Objetos do dia a dia 101 · 📚 Livros 97 · 🎭 Atores 94 · 🔬 Cientistas 92 · 📺 Séries 91 · 🏀 Esportes 90 ·
+🧙 Animes 90 · 🚗 Carros 84 · 🏺 Mitologia 77 · 👷 Profissões 72 · ⚗️ Elementos químicos 70 · 🎨 Artistas 70 ·
+🫀 Corpo humano 60 · 🌱 Plantas 60 · 🚩 Bandeiras 58 · 💡 Invenções 58 · 🗣️ Línguas 56 · 🖼️ Obras de arte 50 ·
+👕 Roupas 48 · 🚲 Meios de transporte 48 · 🦕 Dinossauros 46 · 🪐 Espaço 45 · 🌋 Fenômenos naturais 42 ·
+📐 Formas geométricas 41 · 🌳 Biomas 28 · 🏞️ Estados do Brasil 27
 
-**Total: 2.847 itens.**
+**Universos temáticos (13)**
+
+⚡ Pokémon 245 · ⚔️ League of Legends 114 · ⛏️ Minecraft 91 · 🕷️ Marvel 78 · 🏰 Disney 73 ·
+🪄 Harry Potter 66 · 🍥 Naruto 61 · 🦇 DC Comics 58 · 🐉 Dragon Ball 57 · 🇧🇷 Futebol brasileiro 56 ·
+🌌 Star Wars 52 · 🏴‍☠️ One Piece 50 · 💍 O Senhor dos Anéis 45
+
+**Total: 4.178 itens.**
 
 ## Licença
 

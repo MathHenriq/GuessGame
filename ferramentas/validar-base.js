@@ -44,6 +44,13 @@ vm.createContext(contexto);
   'assets/js/dados/especificos-games.js',
   'assets/js/dados/especificos-animes.js',
   'assets/js/dados/especificos-cultura.js',
+  'assets/js/dados/tema-ciencias.js',
+  'assets/js/dados/tema-natureza.js',
+  'assets/js/dados/tema-sociedade.js',
+  'assets/js/dados/tema-cotidiano.js',
+  'assets/js/dados/tema-cultura.js',
+  'assets/js/dados/especificos-universos.js',
+  'assets/js/dados/expansao-pokemon.js',
   'assets/js/dados/destaques.js'
 ].forEach(function (arquivo) {
   vm.runInContext(fs.readFileSync(path.join(raiz, arquivo), 'utf8'), contexto, { filename: arquivo });
@@ -80,7 +87,7 @@ GG.temas.forEach(function (tema) {
       if (campo.tipo === 'ordinal' && !(valor >= 1 && valor <= 5)) {
         anotar(tema, item, campo.chave + ' deve ser de 1 a 5 (veio "' + valor + '")');
       }
-      if (campo.tipo === 'ano' && valor !== null && typeof valor !== 'number') {
+      if ((campo.tipo === 'ano' || campo.tipo === 'numero') && valor !== null && typeof valor !== 'number') {
         anotar(tema, item, campo.chave + ' deve ser número (veio "' + valor + '")');
       }
       if (campo.tipo === 'lista' && !Array.isArray(valor)) {

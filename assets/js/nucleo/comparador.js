@@ -6,6 +6,8 @@
 
    Regras por tipo de campo:
      ano      igual = 🟩 | dentro da tolerância = 🟨 | fora = 🟥  (+ seta ↑/↓)
+     numero   igual ao ano, para grandezas que não são data (número atômico,
+              número de lados, quantidade de falantes...)
      ordinal  igual = 🟩 | um degrau de distância = 🟨 | resto = 🟥 (+ seta)
      pais     mesmo país = 🟩 | mesmo continente = 🟨 | resto = 🟥
      lista    conjuntos iguais = 🟩 | alguma coincidência = 🟨 | nenhuma = 🟥
@@ -85,7 +87,8 @@
   GG.compararCampo = function (campo, palpite, segredo, opcoes) {
     opcoes = opcoes || {};
     switch (campo.tipo) {
-      case 'ano': return compararAno(palpite, segredo, campo, opcoes);
+      case 'ano':
+      case 'numero': return compararAno(palpite, segredo, campo, opcoes);
       case 'ordinal': return compararOrdinal(palpite, segredo, campo, opcoes);
       case 'pais': return compararPais(palpite, segredo);
       case 'lista': return compararLista(palpite, segredo);

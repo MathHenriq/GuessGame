@@ -130,6 +130,133 @@
     'Lúcio Malfoy', 'Cho Chang', 'Olho-Tonto Moody'
   ]);
 
+
+  GG.destacarItens('objetos', [
+    'Cadeira', 'Mesa', 'Cama', 'Sofá', 'Geladeira', 'Fogão', 'Televisão', 'Celular',
+    'Computador', 'Panela', 'Prato', 'Copo', 'Garfo', 'Faca', 'Colher', 'Caneta', 'Lápis',
+    'Borracha', 'Caderno', 'Mochila', 'Livro', 'Tesoura', 'Régua', 'Vassoura', 'Espelho',
+    'Toalha', 'Escova de dente', 'Chave', 'Óculos', 'Bicicleta', 'Bola', 'Martelo',
+    'Lâmpada', 'Ventilador', 'Relógio de parede', 'Guarda-chuva', 'Travesseiro', 'Chinelo'
+  ]);
+
+  GG.destacarItens('profissoes', [
+    'Professor', 'Médico', 'Enfermeiro', 'Dentista', 'Policial', 'Bombeiro', 'Motorista',
+    'Cozinheiro', 'Padeiro', 'Pedreiro', 'Eletricista', 'Mecânico', 'Veterinário', 'Advogado',
+    'Engenheiro civil', 'Arquiteto', 'Programador', 'Jornalista', 'Cabeleireiro', 'Vendedor',
+    'Agricultor', 'Pescador', 'Piloto de avião', 'Astronauta', 'Ator', 'Músico', 'Youtuber',
+    'Faxineiro', 'Carteiro', 'Entregador'
+  ]);
+
+  GG.destacarItens('elementos', [
+    'Oxigênio', 'Hidrogênio', 'Carbono', 'Nitrogênio', 'Ferro', 'Ouro', 'Prata', 'Cobre',
+    'Alumínio', 'Cálcio', 'Sódio', 'Potássio', 'Cloro', 'Enxofre', 'Hélio', 'Chumbo',
+    'Mercúrio', 'Zinco', 'Magnésio', 'Silício', 'Fósforo', 'Urânio', 'Platina', 'Neônio',
+    'Iodo', 'Lítio', 'Flúor', 'Estanho', 'Níquel', 'Argônio'
+  ]);
+
+  GG.destacarItens('corpo', [
+    'Coração', 'Cérebro', 'Pulmão', 'Estômago', 'Fígado', 'Rim', 'Pele', 'Olho', 'Ouvido',
+    'Nariz', 'Língua', 'Dente', 'Crânio', 'Coluna vertebral', 'Costela',
+    'Fêmur', 'Sangue', 'Intestino delgado', 'Intestino grosso', 'Bexiga', 'Bíceps',
+    'Cerebelo', 'Medula espinhal', 'Neurônio', 'Diafragma', 'Apêndice', 'Traqueia', 'Esôfago'
+  ]);
+
+  GG.destacarItens('astros', [
+    'Sol', 'Terra', 'Lua', 'Marte', 'Júpiter', 'Saturno', 'Vênus', 'Mercúrio', 'Urano',
+    'Netuno', 'Plutão', 'Via Láctea', 'Cometa Halley', 'Buraco negro', 'Eclipse solar',
+    'Cruzeiro do Sul', 'Ursa Maior', 'Órion', 'Estrela Polar', 'Apollo 11',
+    'Estação Espacial Internacional', 'Telescópio Hubble', 'Sirius', 'Anéis de Saturno'
+  ]);
+
+  GG.destacarItens('dinossauros', [
+    'Tiranossauro Rex', 'Velociraptor', 'Tricerátops', 'Estegossauro', 'Braquiossauro',
+    'Espinossauro', 'Pterodáctilo', 'Diplodoco', 'Anquilossauro', 'Alossauro',
+    'Mamute-lanoso', 'Tigre-dente-de-sabre', 'Megalodonte', 'Mosassauro', 'Giganotossauro',
+    'Parassaurolofo', 'Carnotauro', 'Iguanodonte', 'Dodô', 'Arqueopterix'
+  ]);
+
+  GG.destacarItens('plantas', [
+    'Rosa', 'Girassol', 'Orquídea', 'Cacto', 'Samambaia', 'Bambu', 'Eucalipto', 'Coqueiro',
+    'Mangueira', 'Bananeira', 'Ipê-amarelo', 'Pau-brasil', 'Cafeeiro', 'Cana-de-açúcar',
+    'Milho (planta)', 'Arroz (planta)', 'Trigo', 'Soja', 'Tulipa', 'Margarida', 'Babosa',
+    'Hortelã', 'Vitória-régia', 'Sequoia', 'Cerejeira', 'Espada-de-são-jorge'
+  ]);
+
+  GG.destacarItens('transporte', [
+    'Carro', 'Bicicleta', 'Ônibus', 'Avião', 'Moto', 'Trem', 'Metrô', 'Navio de cruzeiro',
+    'Caminhão', 'Helicóptero', 'Barco a motor', 'Skate', 'Patinete', 'Foguete', 'Submarino',
+    'Balão de ar quente', 'Cavalo', 'Trator', 'Ambulância', 'Van', 'Canoa', 'Elevador'
+  ]);
+
+  GG.destacarItens('roupas', [
+    'Camiseta', 'Calça jeans', 'Tênis', 'Chinelo', 'Meia', 'Boné', 'Vestido', 'Saia',
+    'Bermuda', 'Short', 'Moletom', 'Jaqueta', 'Blusa de frio', 'Sapato social', 'Bota',
+    'Óculos de sol', 'Mochila', 'Cinto', 'Luva', 'Cachecol', 'Pijama', 'Uniforme escolar',
+    'Biquíni', 'Sunga', 'Chuteira', 'Relógio de pulso'
+  ]);
+
+  GG.destacarItens('invencoes', [
+    'Roda', 'Lâmpada elétrica', 'Telefone', 'Avião', 'Automóvel', 'Internet', 'Celular',
+    'Computador eletrônico', 'Televisão', 'Rádio', 'Imprensa', 'Papel', 'Vacina',
+    'Penicilina', 'Máquina a vapor', 'Fotografia', 'Cinema', 'Raio-X', 'Bússola', 'Escrita',
+    'GPS', 'Wi-Fi', 'Geladeira elétrica', 'Micro-ondas', 'Chuveiro elétrico', 'Videogame'
+  ]);
+
+  GG.destacarItens('mitologia', [
+    'Zeus', 'Poseidon', 'Hades', 'Atena', 'Afrodite', 'Ares', 'Apolo', 'Medusa', 'Minotauro',
+    'Héracles', 'Pégaso', 'Sereia', 'Fênix', 'Unicórnio', 'Thor', 'Odin', 'Loki', 'Anúbis',
+    'Rá', 'Ísis', 'Saci-Pererê', 'Curupira', 'Iara', 'Cuca', 'Mula sem cabeça', 'Lobisomem',
+    'Boitatá', 'Vampiro', 'Dragão europeu', 'Cérbero'
+  ]);
+
+  GG.destacarItens('obras', [
+    'Mona Lisa', 'A Noite Estrelada', 'O Grito', 'A Última Ceia', 'A Criação de Adão',
+    'Davi', 'O Pensador', 'Guernica', 'A Persistência da Memória', 'Os Girassóis',
+    'Abaporu', 'Os Retirantes', 'Vênus de Milo', 'Máscara de Tutancâmon', 'O Beijo',
+    'Moça com Brinco de Pérola', 'A Grande Onda de Kanagawa', 'Menina com Balão'
+  ]);
+
+  GG.destacarItens('estados', ['São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Bahia', 'Paraná']);
+
+  GG.destacarItens('bandeiras', [
+    'Bandeira do Brasil', 'Bandeira dos Estados Unidos', 'Bandeira do Japão',
+    'Bandeira da Argentina', 'Bandeira de Portugal', 'Bandeira da França',
+    'Bandeira da Itália', 'Bandeira da Alemanha', 'Bandeira do Reino Unido',
+    'Bandeira do Canadá', 'Bandeira da China', 'Bandeira da Espanha', 'Bandeira do México'
+  ]);
+
+  GG.destacarItens('linguas', [
+    'Português', 'Inglês', 'Espanhol', 'Francês', 'Italiano', 'Alemão', 'Japonês',
+    'Mandarim', 'Coreano', 'Russo', 'Árabe', 'Hindi', 'Latim', 'Libras', 'Guarani', 'Grego'
+  ]);
+
+  GG.destacarItens('dc', [
+    'Batman', 'Superman', 'Mulher-Maravilha', 'Coringa', 'Arlequina', 'Flash', 'Aquaman',
+    'Lanterna Verde', 'Robin', 'Mulher-Gato', 'Pinguim', 'Lex Luthor', 'Espantalho', 'Bane',
+    'Ciborgue', 'Supergirl', 'Charada', 'Duas-Caras', 'Hera Venenosa', 'Shazam',
+    'Arqueiro Verde', 'Darkseid', 'Ravena', 'Estelar', 'Mutano', 'Nightwing'
+  ]);
+
+  GG.destacarItens('starwars', [
+    'Darth Vader', 'Luke Skywalker', 'Yoda', 'Leia Organa', 'Han Solo', 'Chewbacca',
+    'Obi-Wan Kenobi', 'R2-D2', 'C-3PO', 'Anakin Skywalker', 'Imperador Palpatine',
+    'Darth Maul', 'Boba Fett', 'Grogu', 'Din Djarin', 'Rey', 'Kylo Ren', 'BB-8',
+    'Ahsoka Tano', 'Jabba the Hutt', 'Stormtrooper', 'Padmé Amidala', 'Lando Calrissian'
+  ]);
+
+  GG.destacarItens('senhordosaneis', [
+    'Frodo Bolseiro', 'Gandalf', 'Aragorn', 'Legolas', 'Gimli', 'Gollum', 'Sauron',
+    'Samwise Gamgi', 'Bilbo Bolseiro', 'Saruman', 'Galadriel', 'Smaug', 'Thorin Escudo de Carvalho',
+    'Arwen', 'Elrond', 'Boromir', 'Éowyn', 'Barbárvore', 'Merry Brandebuque', 'Pippin Tûk'
+  ]);
+
+  GG.destacarItens('disney', [
+    'Mickey Mouse', 'Pato Donald', 'Pateta', 'Minnie Mouse', 'Simba', 'Elsa', 'Anna', 'Olaf',
+    'Stitch', 'Woody', 'Buzz Lightyear', 'Nemo', 'Dory', 'Cinderela', 'Branca de Neve',
+    'Ariel', 'Bela', 'Aladdin', 'Gênio', 'Mulan', 'Moana', 'Rapunzel', 'Peter Pan',
+    'Sininho', 'Malévola', 'Scar', 'Mufasa', 'Pinóquio', 'Dumbo', 'Bambi', 'Tio Patinhas'
+  ]);
+
   GG.destacarItens('marvel', [
     'Homem-Aranha', 'Homem de Ferro', 'Capitão América', 'Thor', 'Hulk', 'Viúva Negra',
     'Pantera Negra', 'Doutor Estranho', 'Deadpool', 'Wolverine', 'Thanos', 'Loki',

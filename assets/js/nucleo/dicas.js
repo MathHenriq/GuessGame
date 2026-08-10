@@ -82,6 +82,22 @@
       });
     }
 
+    // 6 — Reserva: temas feitos só de campos de texto (Roupas, Profissões,
+    // Formas geométricas) não teriam dicas suficientes. Aqui os próprios
+    // campos viram dica, do mais geral para o mais específico.
+    if (dicas.length < 3) {
+      tema.campos.forEach(function (campo) {
+        if (dicas.length >= 3) return;
+        if (campo.tipo !== 'texto' && campo.tipo !== 'numero') return;
+        var valor = item.valores[campo.chave];
+        if (valor == null || valor === '') return;
+        dicas.push({
+          rotulo: campo.rotulo,
+          texto: campo.rotulo + ': ' + GG.exibirValor(campo, valor) + '.'
+        });
+      });
+    }
+
     // 6 — Dica final: a letra inicial e o tamanho do nome.
     dicas.push({
       rotulo: 'Dica final',
