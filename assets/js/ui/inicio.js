@@ -17,11 +17,15 @@
     cartao.type = 'button';
     cartao.setAttribute('aria-label', 'Jogar categoria ' + tema.nome);
 
-    cartao.appendChild(ui.el('span', 'cartao-categoria__indice',
+    // Faixa ilustrada no topo (o desenho da categoria) e, abaixo, o texto.
+    cartao.appendChild(ui.arteDoTema(tema));
+
+    var texto = ui.el('span', 'cartao-categoria__texto');
+    texto.appendChild(ui.el('span', 'cartao-categoria__indice',
       (indice + 1 < 10 ? '0' : '') + (indice + 1)));
-    cartao.appendChild(ui.el('span', 'cartao-categoria__emoji', tema.emoji));
-    cartao.appendChild(ui.el('span', 'cartao-categoria__nome', tema.nome));
-    cartao.appendChild(ui.el('span', 'cartao-categoria__meta', tema.itens.length + ' itens'));
+    texto.appendChild(ui.el('span', 'cartao-categoria__nome', tema.nome));
+    texto.appendChild(ui.el('span', 'cartao-categoria__meta', tema.itens.length + ' itens'));
+    cartao.appendChild(texto);
 
     cartao.addEventListener('click', function () {
       GG.som.clique();
@@ -112,7 +116,7 @@
       var botao = ui.el('button', 'sugestao');
       botao.type = 'button';
 
-      botao.appendChild(ui.el('span', 'sugestao__emoji', sugestao.tema.emoji));
+      botao.appendChild(ui.arteDoTema(sugestao.tema, 'miniatura'));
 
       var texto2 = ui.el('span', 'sugestao__texto');
       texto2.appendChild(ui.el('span', 'sugestao__titulo', sugestao.titulo));

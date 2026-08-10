@@ -171,12 +171,70 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 .seletor-dificuldade button[aria-pressed="true"] { background: var(--texto); color: var(--tinta); }
 
+/* ------------------------------------------- ILUSTRAÇÃO DAS CATEGORIAS
+   O desenho vem do sprite <svg id="artes-categorias"> do index.html e é
+   pintado com a cor da categoria (--cor-tema, definida em ilustracoes.js).
+   --cor-tema-rgb é a mesma cor em componentes, para tingir fundos com
+   transparência. Os valores abaixo são o padrão de quem não tem cor. */
+.arte {
+  --cor-tema: var(--acento);
+  --cor-tema-rgb: 140, 140, 140;
+  --tamanho: 56px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: var(--cor-tema);
+  background-color: rgba(var(--cor-tema-rgb), .16);
+}
+
+.arte svg {
+  position: relative;
+  display: block;
+  width: var(--tamanho);
+  height: var(--tamanho);
+  transition: transform var(--transicao);
+}
+
+/* As cores das categorias foram escolhidas para brilhar no fundo escuro.
+   No tema claro, sobre papel branco, elas precisam escurecer para o desenho
+   não sumir — ajuste feito na hora de pintar, sem duplicar a tabela de cores. */
+[data-tema-visual="claro"] .arte svg { filter: brightness(.78) saturate(1.2); }
+[data-tema-visual="claro"] .arte { background-color: rgba(var(--cor-tema-rgb), .2); }
+
+/* Categoria ainda sem desenho: o emoji do tema segura o lugar. */
+.arte--emoji { font-size: calc(var(--tamanho) * .8); line-height: 1; }
+
+/* Ao lado do texto, nas sugestões do "Eu gosto de". */
+.arte--miniatura {
+  --tamanho: 26px;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+/* Ao lado do nome do item revelado no fim da partida. */
+.arte--selo {
+  --tamanho: 22px;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+/* Preenchendo o espaço da foto enquanto ela não chega. */
+.arte--moldura {
+  --tamanho: 82px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
 /* ---------------------------------------------------- CARTÃO DE CATEGORIA */
 .cartao-categoria {
   position: relative;
   display: grid;
-  gap: .15rem;
-  padding: 1rem;
+  grid-template-rows: auto 1fr;
   text-align: left;
   background: var(--tinta-2);
   border: 1px solid var(--linha);
@@ -185,12 +243,27 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
   transition: transform var(--transicao), border-color var(--transicao), background-color var(--transicao);
 }
 
+.cartao-categoria > .arte {
+  height: 96px;
+  border-bottom: 1px solid var(--linha);
+}
+
+/* Hachura discreta na faixa: o desenho não flutua num retângulo chapado. */
+.cartao-categoria > .arte::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(-45deg, rgba(var(--cor-tema-rgb), .2) 0 1px, transparent 1px 9px);
+}
+
+.cartao-categoria__texto { display: grid; gap: .15rem; padding: .75rem .9rem .9rem; }
+
 .cartao-categoria::after {
   /* Faixa diagonal que aparece no hover — marca gráfica do projeto. */
   content: '';
   position: absolute;
   right: -30px;
-  top: -30px;
+  bottom: -30px;
   width: 70px;
   height: 70px;
   background-image: repeating-linear-gradient(-45deg, var(--acento) 0 2px, transparent 2px 7px);
@@ -200,14 +273,13 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 .cartao-categoria:hover { transform: translateY(-3px); border-color: var(--linha-forte); background: var(--tinta-3); }
 .cartao-categoria:hover::after { opacity: .55; }
+.cartao-categoria:hover .arte svg { transform: scale(1.08); }
 
 .cartao-categoria__indice {
   font-family: var(--fonte-mono);
   font-size: .68rem;
   color: var(--texto-suave);
 }
-
-.cartao-categoria__emoji { font-size: 1.6rem; line-height: 1.1; }
 
 .cartao-categoria__nome {
   font-family: var(--fonte-display);
@@ -234,7 +306,7 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 }
 
 .sugestao:hover { transform: translateX(3px); border-color: var(--linha-forte); border-left-color: var(--acento); }
-.sugestao__emoji { font-size: 1.3rem; }
+.sugestao:hover .arte svg { transform: scale(1.08); }
 .sugestao__texto { display: grid; gap: .1rem; min-width: 0; }
 .sugestao__titulo { font-weight: 700; font-size: .95rem; }
 .sugestao__motivo { font-size: .78rem; color: var(--texto-suave); }
@@ -574,7 +646,14 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
   text-align: left;
 }
 
-.resultado__nome { font-family: var(--fonte-display); font-size: 1.3rem; text-transform: uppercase; }
+.resultado__nome {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--fonte-display);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
 
 .resultado__atributos { display: flex; flex-wrap: wrap; gap: .35rem; }
 
@@ -668,6 +747,12 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 /* ------------------------------------------------ AJUSTES PARA CELULARES */
 @media (max-width: 720px) {
+  /* Cartão mais estreito no celular: a faixa ilustrada encolhe junto. */
+  .cartao-categoria > .arte { height: 76px; --tamanho: 42px; }
+  .cartao-categoria__texto { padding: .6rem .7rem .7rem; }
+  .arte--miniatura { width: 38px; height: 38px; --tamanho: 22px; }
+  .arte--moldura { --tamanho: 60px; }
+
   .tabuleiro__cabecalho,
   .linha-palpite { grid-template-columns: repeat(var(--colunas), minmax(84px, 1fr)); gap: 6px; }
   .peca { min-height: 84px; font-size: .72rem; padding: .4rem .3rem; }

@@ -367,7 +367,9 @@
     imagem.hidden = true;
     imagem.removeAttribute('src');
     credito.textContent = '';
-    espaco.textContent = partida.tema.emoji;
+    // Enquanto a foto não chega (ou sem internet), o desenho da categoria
+    // ocupa o lugar — nunca fica um retângulo vazio.
+    ui.limpar(espaco).appendChild(ui.arteDoTema(partida.tema, 'moldura'));
     figura.classList.add('foto--carregando');
 
     ui.$('#btn-google').href = GG.linkGoogleImagens(partida.tema, partida.segredo);
@@ -418,8 +420,10 @@
 
     // Cartão do item secreto com todos os atributos revelados.
     var caixaItem = ui.limpar(ui.$('#resultado-item'));
-    caixaItem.appendChild(ui.el('span', 'resultado__nome',
-      partida.tema.emoji + ' ' + partida.segredo.nome));
+    var linhaNome = ui.el('span', 'resultado__nome');
+    linhaNome.appendChild(ui.arteDoTema(partida.tema, 'selo'));
+    linhaNome.appendChild(document.createTextNode(partida.segredo.nome));
+    caixaItem.appendChild(linhaNome);
 
     var atributos = ui.el('div', 'resultado__atributos');
     partida.tema.campos.forEach(function (campo) {

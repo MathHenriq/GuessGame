@@ -85,6 +85,23 @@ Por fim, inclua o arquivo no `index.html`, junto dos outros de dados:
 Pronto: o tema aparece sozinho na tela inicial, no modo professor e nas sugestões do "Eu gosto de".
 Nada mais precisa ser alterado.
 
+### A ilustração do cartão
+
+Cada categoria tem um desenho próprio na tela inicial, no lugar do emoji. Os desenhos são
+vetores guardados dentro do próprio `index.html`, logo depois de `<body>`, num bloco
+`<svg id="artes-categorias">` — ficam ali (e não em arquivos separados) para o jogo continuar
+funcionando ao abrir o `index.html` com dois cliques, sem servidor e sem internet.
+
+Para ilustrar uma categoria nova:
+
+1. no `index.html`, copie um `<symbol>` parecido e troque o `id` para `arte-SEUID`, usando o
+   mesmo `id` do tema. Desenhe dentro da área `0 0 64 64` e use `fill="currentColor"`: a cor
+   vem de fora, então o desenho combina sozinho com o tema claro e o escuro;
+2. em `assets/js/ui/ilustracoes.js`, escolha a cor da categoria na tabela `ui.coresDeTema`.
+
+Se faltar o desenho ou a cor, o cartão volta a mostrar o emoji do tema — nada quebra, e a
+categoria continua jogável enquanto o desenho não existe.
+
 ### Tipos de campo disponíveis
 
 | tipo | 🟩 verde | 🟨 amarelo | Observações |
@@ -244,7 +261,7 @@ exige chave, cadastro de faturamento e tem cota diária baixa — e uma chave de
 dentro de um site estático, já que qualquer aluno leria o código-fonte. Raspar a página de resultados
 do Google também é bloqueado por CORS no navegador.
 
-Sem internet nada quebra: aparece o emoji da categoria no lugar da foto. As imagens já buscadas
+Sem internet nada quebra: aparece o desenho da categoria no lugar da foto. As imagens já buscadas
 ficam em cache no navegador. Toda essa lógica está em `assets/js/nucleo/imagens.js`.
 
 ### Modo professor
@@ -301,6 +318,7 @@ assets/
       destaques.js             Quem entra nos sorteios de fácil e médio (carregar por último)
     ui/                        Interface, uma tela por arquivo
       comum.js, inicio.js, jogo.js, professor.js, ranking.js
+      ilustracoes.js           Desenho e cor de cada categoria
     app.js                     Ponto de entrada
 ferramentas/
   validar-base.js              Validação da base de dados (Node.js, opcional)
