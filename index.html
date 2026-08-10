@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema-visual="escuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Guess Game — descubra o item secreto</title>
+  <meta name="description" content="Jogo educativo de dedução: escolha uma categoria, faça palpites e descubra o item secreto usando lógica e eliminação de possibilidades.">
+  <meta name="theme-color" content="#0d0e12">
+
+  <link rel="stylesheet" href="assets/css/fontes.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/componentes.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+</head>
+
+<body>
+  <!-- ================================================================ TOPO -->
+  <header class="topo">
+    <div class="topo__interno">
+      <button class="marca" type="button" data-ir="inicio" aria-label="Voltar ao início">
+        <span class="marca__alvo" aria-hidden="true"></span>
+        <span class="marca__texto">Guess<em>Game</em></span>
+      </button>
+
+      <nav class="navegacao" aria-label="Seções">
+        <button type="button" class="navegacao__item" data-ir="inicio">Jogar</button>
+        <button type="button" class="navegacao__item" data-ir="professor">Professor</button>
+        <button type="button" class="navegacao__item" data-ir="ranking">Ranking</button>
+      </nav>
+
+      <div class="topo__acoes">
+        <button type="button" class="botao-icone" id="btn-som" title="Ligar ou desligar os sons" aria-pressed="true">
+          <span data-som-ligado>🔊</span>
+        </button>
+        <button type="button" class="botao-icone" id="btn-visual" title="Alternar entre tema claro e escuro">
+          <span data-visual-icone>🌙</span>
+        </button>
+        <div class="placar-topo" id="placar-topo" title="Seus pontos acumulados">
+          <span class="placar-topo__valor" id="placar-pontos">0</span>
+          <span class="placar-topo__rotulo">pts</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="principal">
+
+    <!-- ============================================================ INÍCIO -->
+    <section class="tela tela--ativa" id="tela-inicio">
+      <div class="abertura">
+        <div class="abertura__texto">
+          <p class="sobretitulo">Jogo de dedução para a sala de aula</p>
+          <h1 class="titulo-gigante">
+            Descubra o <span class="destaque">item secreto</span> antes das tentativas acabarem.
+          </h1>
+          <p class="paragrafo">
+            Escolha uma categoria, chute um item e compare as características.
+            <strong>Verde</strong> acertou, <strong>amarelo</strong> chegou perto,
+            <strong>vermelho</strong> passou longe. Use lógica, elimine possibilidades e feche o cerco.
+          </p>
+
+          <div class="abertura__numeros">
+            <div class="numero">
+              <strong id="contador-categorias">0</strong>
+              <span>categorias</span>
+            </div>
+            <div class="numero">
+              <strong id="contador-itens">0</strong>
+              <span>itens na base</span>
+            </div>
+            <div class="numero">
+              <strong id="contador-sequencia">0</strong>
+              <span>vitórias seguidas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modo "Eu gosto de" -->
+        <form class="curtida" id="form-curtida" autocomplete="off">
+          <h2 class="curtida__titulo">Eu gosto de…</h2>
+          <p class="curtida__ajuda">Digite algo que você curte e o jogo monta desafios em cima disso.</p>
+          <div class="curtida__campo">
+            <input type="text" id="entrada-curtida" class="entrada" placeholder="Marvel, futebol, anime, comida…"
+                   aria-label="Digite algo que você gosta" maxlength="40">
+            <button type="submit" class="botao botao--acento">Sugerir</button>
+          </div>
+          <div class="curtida__atalhos" id="atalhos-curtida"></div>
+          <div class="sugestoes" id="lista-sugestoes" hidden></div>
+        </form>
+      </div>
+
+      <div class="secao-cabecalho">
+        <h2 class="titulo-secao">Escolha uma categoria</h2>
+        <div class="controles-partida">
+          <div class="seletor-dificuldade" id="seletor-dificuldade" role="group" aria-label="Dificuldade"></div>
+          <button type="button" class="chip" id="btn-cronometro" aria-pressed="false"
+                  title="Liga o cronômetro e o bônus de pontos por rapidez">⏱ Cronômetro</button>
+        </div>
+      </div>
+
+      <div class="grade-categorias" id="grade-categorias"></div>
+    </section>
+
+    <!-- ============================================================== JOGO -->
+    <section class="tela" id="tela-jogo" aria-live="polite">
+      <div class="jogo-topo">
+        <button type="button" class="botao botao--fantasma" data-ir="inicio">← Trocar categoria</button>
+        <div class="jogo-topo__chips" id="jogo-chips"></div>
+      </div>
+
+      <div class="painel-partida">
+        <div class="painel-partida__barra">
+          <div class="progresso" aria-hidden="true"><span id="progresso-preenchido"></span></div>
+          <div class="painel-partida__medidores">
+            <span class="medidor" id="medidor-tentativas">Tentativa 0 de 6</span>
+            <span class="medidor medidor--tempo" id="medidor-tempo" hidden>00:00</span>
+          </div>
+        </div>
+
+        <form class="palpite" id="form-palpite" autocomplete="off">
+          <div class="palpite__campo">
+            <input type="text" id="entrada-palpite" class="entrada entrada--grande"
+                   placeholder="Digite seu palpite…" aria-label="Seu palpite" aria-autocomplete="list">
+            <ul class="autocompletar" id="autocompletar" role="listbox" hidden></ul>
+          </div>
+          <button type="submit" class="botao botao--acento botao--grande">Chutar</button>
+          <button type="button" class="botao botao--contorno botao--grande" id="btn-dica">
+            Pedir dica <span class="botao__contagem" id="contagem-dicas">0/3</span>
+          </button>
+        </form>
+
+        <div class="dicas" id="painel-dicas" hidden></div>
+      </div>
+
+      <div class="tabela-envolucro">
+        <table class="tabela-palpites" id="tabela-palpites">
+          <thead id="tabela-cabecalho"></thead>
+          <tbody id="tabela-corpo"></tbody>
+        </table>
+        <p class="tabela-vazia" id="tabela-vazia">
+          Nenhum palpite ainda. Dê o primeiro chute — mesmo um palpite “errado” entrega muita informação.
+        </p>
+      </div>
+
+      <div class="legenda">
+        <span><i class="quadro quadro--certo"></i> Correto</span>
+        <span><i class="quadro quadro--quase"></i> Parcialmente correto</span>
+        <span><i class="quadro quadro--errado"></i> Errado</span>
+        <span><i class="quadro quadro--seta">↑</i> O valor secreto é maior</span>
+      </div>
+    </section>
+
+    <!-- ========================================================= PROFESSOR -->
+    <section class="tela" id="tela-professor">
+      <div class="secao-cabecalho">
+        <div>
+          <p class="sobretitulo">Área do professor</p>
+          <h2 class="titulo-secao">Monte um desafio para a turma</h2>
+        </div>
+      </div>
+
+      <div class="professor">
+        <form class="professor__form" id="form-professor">
+          <label class="campo">
+            <span class="campo__rotulo">Categoria</span>
+            <select class="entrada" id="prof-tema"></select>
+          </label>
+
+          <label class="campo">
+            <span class="campo__rotulo">Dificuldade</span>
+            <select class="entrada" id="prof-dificuldade">
+              <option value="facil">🟢 Fácil — poucas possibilidades</option>
+              <option value="medio" selected>🟡 Médio — categoria inteira</option>
+              <option value="dificil">🔴 Difícil — itens parecidos, menos pistas</option>
+            </select>
+          </label>
+
+          <div class="campo-duplo">
+            <label class="campo">
+              <span class="campo__rotulo">Tentativas</span>
+              <input class="entrada" type="number" id="prof-tentativas" min="3" max="15" value="6">
+            </label>
+            <label class="campo">
+              <span class="campo__rotulo">Dicas liberadas</span>
+              <input class="entrada" type="number" id="prof-dicas" min="0" max="6" value="3">
+            </label>
+          </div>
+
+          <label class="campo">
+            <span class="campo__rotulo">Item secreto</span>
+            <select class="entrada" id="prof-item">
+              <option value="">Sortear automaticamente</option>
+            </select>
+          </label>
+
+          <label class="alternador">
+            <input type="checkbox" id="prof-cronometro">
+            <span class="alternador__marca" aria-hidden="true"></span>
+            <span>Ligar cronômetro (dá bônus de pontos por rapidez)</span>
+          </label>
+
+          <div class="professor__botoes">
+            <button type="submit" class="botao botao--acento botao--grande">Gerar desafio</button>
+            <button type="button" class="botao botao--contorno" id="prof-jogar">Jogar agora</button>
+          </div>
+        </form>
+
+        <aside class="professor__saida" id="professor-saida">
+          <h3 class="cartao-titulo">Como usar em sala</h3>
+          <ol class="lista-passos">
+            <li>Escolha a categoria e a dificuldade de acordo com a turma.</li>
+            <li>Clique em <strong>Gerar desafio</strong> para criar um código.</li>
+            <li>Compartilhe o link com os alunos: todos jogam o mesmo item secreto.</li>
+            <li>Projete a tabela de palpites e discuta cada eliminação em voz alta.</li>
+          </ol>
+          <div class="dica-pedagogica">
+            <strong>Sugestão pedagógica:</strong> peça que a turma justifique cada palpite antes de
+            chutar. O objetivo não é acertar rápido, é acertar com argumento.
+          </div>
+        </aside>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="entrar-codigo">
+        <h3 class="cartao-titulo">Recebi um código de desafio</h3>
+        <form class="entrar-codigo__form" id="form-codigo" autocomplete="off">
+          <input type="text" class="entrada" id="entrada-codigo" placeholder="Cole aqui o código do desafio">
+          <button type="submit" class="botao botao--contorno">Entrar no desafio</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =========================================================== RANKING -->
+    <section class="tela" id="tela-ranking">
+      <div class="secao-cabecalho">
+        <div>
+          <p class="sobretitulo">Placar local</p>
+          <h2 class="titulo-secao">Ranking da turma</h2>
+        </div>
+        <button type="button" class="botao botao--fantasma" id="btn-limpar-ranking">Zerar placar</button>
+      </div>
+
+      <div class="identidade">
+        <label class="campo">
+          <span class="campo__rotulo">Seu nome no placar</span>
+          <input class="entrada" type="text" id="entrada-nome" maxlength="24" placeholder="Ex.: Ana, 7º B">
+        </label>
+        <div class="identidade__resumo" id="resumo-perfil"></div>
+      </div>
+
+      <div class="podio" id="podio"></div>
+      <div class="historico" id="historico"></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>Guess Game — projeto educativo aberto. Amplie a base de dados em <code>assets/js/dados/</code>.</p>
+  </footer>
+
+  <!-- =========================================================== RESULTADO -->
+  <div class="cortina" id="cortina" hidden>
+    <div class="resultado" role="dialog" aria-modal="true" aria-labelledby="resultado-titulo">
+      <canvas class="confete" id="confete" aria-hidden="true"></canvas>
+      <p class="resultado__selo" id="resultado-selo">Fim de jogo</p>
+      <h2 class="resultado__titulo" id="resultado-titulo">Você acertou!</h2>
+      <div class="resultado__item" id="resultado-item"></div>
+      <div class="resultado__curiosidade" id="resultado-curiosidade"></div>
+      <div class="resultado__pontos">
+        <span class="resultado__pontos-valor" id="resultado-pontos">0</span>
+        <span class="resultado__pontos-rotulo">pontos</span>
+      </div>
+      <ul class="resultado__detalhes" id="resultado-detalhes"></ul>
+      <div class="resultado__botoes">
+        <button type="button" class="botao botao--acento botao--grande" id="btn-jogar-novamente">Jogar de novo</button>
+        <button type="button" class="botao botao--contorno" data-ir="inicio">Trocar categoria</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite" hidden></div>
+
+  <!-- Núcleo: regras do jogo -->
+  <script src="assets/js/nucleo/base.js"></script>
+  <script src="assets/js/nucleo/comparador.js"></script>
+  <script src="assets/js/nucleo/dicas.js"></script>
+  <script src="assets/js/nucleo/pontuacao.js"></script>
+  <script src="assets/js/nucleo/partida.js"></script>
+  <script src="assets/js/nucleo/armazenamento.js"></script>
+  <script src="assets/js/nucleo/sugestoes.js"></script>
+  <script src="assets/js/nucleo/desafio.js"></script>
+  <script src="assets/js/nucleo/efeitos.js"></script>
+
+  <!-- Base de dados: um arquivo por família de temas -->
+  <script src="assets/js/dados/entretenimento.js"></script>
+  <script src="assets/js/dados/pessoas.js"></script>
+  <script src="assets/js/dados/mundo.js"></script>
+  <script src="assets/js/dados/objetos.js"></script>
+
+  <!-- Interface -->
+  <script src="assets/js/ui/comum.js"></script>
+  <script src="assets/js/ui/inicio.js"></script>
+  <script src="assets/js/ui/jogo.js"></script>
+  <script src="assets/js/ui/professor.js"></script>
+  <script src="assets/js/ui/ranking.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+/* =========================================================================
+   LAYOUT — topo, telas, grades e estruturas de página
+   ========================================================================= */
+
+/* ------------------------------------------------------------------ TOPO */
+.topo {
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--tinta) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linha);
+}
+
+.topo__interno {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: 0;
+}
+
+.marca__alvo {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--acento);
+  border-radius: 50%;
+  position: relative;
+  flex: none;
+}
+
+.marca__alvo::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: var(--coral);
+  border-radius: 50%;
+}
+
+.marca__texto {
+  font-family: var(--fonte-display);
+  font-size: 1.12rem;
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+}
+
+.marca__texto em { font-style: normal; color: var(--texto-suave); }
+
+.navegacao {
+  display: flex;
+  gap: .25rem;
+  margin-left: auto;
+}
+
+.navegacao__item {
+  padding: .45rem .85rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+  transition: color var(--transicao), border-color var(--transicao);
+}
+
+.navegacao__item:hover { color: var(--texto); border-color: var(--linha); }
+.navegacao__item[aria-current="true"] { color: var(--texto); border-color: var(--linha-forte); background: var(--tinta-2); }
+
+.topo__acoes { display: flex; align-items: center; gap: .45rem; }
+
+.placar-topo {
+  display: flex;
+  align-items: baseline;
+  gap: .25rem;
+  padding: .3rem .6rem;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: var(--tinta-2);
+}
+
+.placar-topo__valor { font-family: var(--fonte-display); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.placar-topo__rotulo { font-family: var(--fonte-mono); font-size: .65rem; color: var(--texto-suave); text-transform: uppercase; }
+
+/* ----------------------------------------------------------------- TELAS */
+main {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: 2.2rem 1.25rem 4rem;
+}
+
+.tela { display: none; }
+.tela--ativa { display: block; animation: entrar-tela 260ms cubic-bezier(.2, .7, .3, 1); }
+
+@keyframes entrar-tela {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------- ABERTURA */
+.abertura {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+  padding-bottom: 3rem;
+}
+
+.abertura__numeros {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--linha);
+}
+
+.numero { display: flex; flex-direction: column; }
+.numero strong {
+  font-family: var(--fonte-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.numero span {
+  font-family: var(--fonte-mono);
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--texto-suave);
+  margin-top: .35rem;
+}
+
+/* --------------------------------------------------- MODO "EU GOSTO DE" */
+.curtida {
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-top: 4px solid var(--acento);
+  border-radius: var(--raio-grande);
+  padding: 1.5rem;
+}
+
+.curtida__titulo { font-size: 1.5rem; text-transform: uppercase; }
+.curtida__ajuda { color: var(--texto-suave); font-size: .92rem; margin-top: .5rem; }
+
+.curtida__campo { display: flex; gap: .5rem; margin-top: 1.1rem; }
+.curtida__campo .entrada { flex: 1; min-width: 0; }
+
+.curtida__atalhos { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .9rem; }
+
+.sugestoes { display: grid; gap: .5rem; margin-top: 1.2rem; }
+
+/* ------------------------------------------------------ CABEÇALHO DE SEÇÃO */
+.secao-cabecalho {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.3rem;
+}
+
+/* -------------------------------------------------------- GRADE DE TEMAS */
+.grade-categorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: .75rem;
+}
+
+/* ------------------------------------------------------------------ JOGO */
+.jogo-topo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.jogo-topo__chips { display: flex; gap: .4rem; flex-wrap: wrap; margin-left: auto; }
+
+.painel-partida {
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-grande);
+  padding: 1.25rem;
+}
+
+.painel-partida__barra { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+
+.painel-partida__medidores { display: flex; gap: .6rem; flex: none; }
+
+.palpite { display: flex; gap: .5rem; flex-wrap: wrap; }
+.palpite__campo { position: relative; flex: 1 1 260px; min-width: 0; }
+
+.dicas { display: grid; gap: .5rem; margin-top: 1.1rem; }
+
+/* -------------------------------------------------------- TABELA DE JOGO */
+.tabela-envolucro {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-grande);
+  background: var(--tinta-2);
+}
+
+.legenda {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  font-size: .82rem;
+  color: var(--texto-suave);
+}
+
+.legenda span { display: flex; align-items: center; gap: .4rem; }
+
+/* ------------------------------------------------------------- PROFESSOR */
+.professor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.professor__form {
+  display: grid;
+  gap: 1rem;
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-grande);
+  padding: 1.5rem;
+}
+
+.campo-duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.professor__botoes { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .3rem; }
+
+.professor__saida {
+  background: var(--tinta-3);
+  border: 1px solid var(--linha);
+  border-left: 4px solid var(--coral);
+  border-radius: var(--raio-grande);
+  padding: 1.5rem;
+}
+
+.lista-passos { display: grid; gap: .7rem; counter-reset: passo; }
+
+/* Numeração fora do fluxo: o texto do passo continua sendo texto corrido,
+   podendo ter <strong> e links sem quebrar o alinhamento. */
+.lista-passos li {
+  counter-increment: passo;
+  position: relative;
+  padding-left: 2.3rem;
+  color: var(--texto-suave);
+  font-size: .94rem;
+}
+
+.lista-passos li::before {
+  content: counter(passo, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: .15rem;
+  width: 26px;
+  font-family: var(--fonte-mono);
+  font-size: .72rem;
+  color: var(--acento);
+  border: 1px solid var(--linha-forte);
+  border-radius: var(--raio);
+  text-align: center;
+  padding: .15rem 0;
+}
+
+.lista-passos strong { color: var(--texto); }
+
+.dica-pedagogica {
+  margin-top: 1.3rem;
+  padding: .9rem 1rem;
+  background: var(--tinta-2);
+  border: 1px dashed var(--linha-forte);
+  border-radius: var(--raio);
+  font-size: .9rem;
+  color: var(--texto-suave);
+}
+
+.dica-pedagogica strong { color: var(--texto); }
+
+.entrar-codigo {
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-grande);
+  padding: 1.5rem;
+}
+
+.entrar-codigo__form { display: flex; gap: .5rem; flex-wrap: wrap; }
+.entrar-codigo__form .entrada { flex: 1 1 260px; }
+
+/* --------------------------------------------------------------- RANKING */
+.identidade {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.identidade__resumo { display: flex; gap: 1.6rem; flex-wrap: wrap; }
+
+.podio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .75rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.historico { display: grid; gap: .4rem; }
+
+/* ---------------------------------------------------------------- RODAPÉ */
+.rodape {
+  border-top: 1px solid var(--linha);
+  padding: 1.5rem 1.25rem 2.5rem;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: .85rem;
+}
+
+/* ------------------------------------------------------------ RESPONSIVO */
+@media (max-width: 900px) {
+  .abertura { grid-template-columns: 1fr; gap: 2rem; }
+  .professor { grid-template-columns: 1fr; }
+  .identidade { grid-template-columns: 1fr; align-items: start; }
+}
+
+@media (max-width: 720px) {
+  main { padding: 1.5rem 1rem 3rem; }
+  .topo__interno { padding: .7rem 1rem; flex-wrap: wrap; gap: .6rem; }
+  .navegacao { order: 3; width: 100%; margin-left: 0; }
+  .navegacao__item { flex: 1; text-align: center; }
+  .topo__acoes { margin-left: auto; }
+  .abertura__numeros { gap: 1.25rem; }
+  .grade-categorias { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
+  .painel-partida { padding: 1rem; }
+  .palpite { flex-direction: column; }
+  /* Em coluna, o flex-basis viraria altura: o campo precisa voltar ao natural. */
+  .palpite__campo { flex: none; width: 100%; }
+  .palpite .botao { width: 100%; }
+  .autocompletar { max-height: 210px; }
+  .podio { grid-template-columns: 1fr; }
+  .campo-duplo { grid-template-columns: 1fr; }
+}

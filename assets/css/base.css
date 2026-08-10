@@ -1,0 +1,172 @@
+/* =========================================================================
+   BASE — variáveis, reset e tipografia
+   -------------------------------------------------------------------------
+   O visual inteiro é controlado pelas variáveis abaixo. Trocar a cor de
+   destaque do projeto é mudar uma linha (--acento).
+   ========================================================================= */
+
+:root {
+  /* Superfícies (tema escuro, padrão) */
+  --tinta: #0d0e12;
+  --tinta-2: #14161d;
+  --tinta-3: #1b1e27;
+  --linha: #2a2e3a;
+  --linha-forte: #3b4150;
+
+  /* Texto */
+  --texto: #edeff5;
+  --texto-suave: #99a1b2;
+
+  /* Destaques */
+  --acento: #d8ff4e;
+  --acento-escuro: #b9e02f;
+  --sobre-acento: #101208;
+  --coral: #ff5c3d;
+  --trama: rgba(255, 255, 255, .055);
+
+  /* Semântica do jogo */
+  --certo: #3ddc84;
+  --quase: #ffc93c;
+  --errado: #f0563f;
+  --sobre-cor: #0d0e12;
+
+  /* Tipografia */
+  --fonte: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fonte-display: 'Archivo Black', 'Archivo', system-ui, 'Segoe UI', sans-serif;
+  --fonte-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+
+  /* Medidas */
+  --raio: 4px;
+  --raio-grande: 8px;
+  --largura: 1180px;
+  --transicao: 160ms cubic-bezier(.2, .7, .3, 1);
+}
+
+/* Tema claro — pensado para projetor e sala com muita luz. */
+[data-tema-visual="claro"] {
+  --tinta: #f1eee5;
+  --tinta-2: #ffffff;
+  --tinta-3: #faf8f2;
+  --linha: #ddd6c6;
+  --linha-forte: #c3bba6;
+  --texto: #16181f;
+  --texto-suave: #5f6472;
+  --acento: #c8f024;
+  --acento-escuro: #a9d015;
+  --sobre-acento: #14180a;
+  --certo: #16a34a;
+  --quase: #d68a00;
+  --errado: #d4341c;
+  --sobre-cor: #ffffff;
+  --trama: rgba(20, 22, 31, .07);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Garante que o atributo `hidden` vença as classes que definem display
+   (a cortina do resultado, o painel de dicas, a lista de sugestões...). */
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--tinta);
+  color: var(--texto);
+  font-family: var(--fonte);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Trama de pontos: dá textura de papel milimetrado sem "fundo mágico". */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(var(--trama) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.topo, main, .rodape, .cortina, .aviso { position: relative; z-index: 1; }
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--fonte-display); font-weight: 400; line-height: 1.05; letter-spacing: -.02em; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; }
+li { list-style: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+table { border-collapse: collapse; width: 100%; }
+code { font-family: var(--fonte-mono); font-size: .9em; }
+
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------ tipografia */
+
+.titulo-gigante {
+  font-size: clamp(2.1rem, 5.4vw, 3.9rem);
+  text-transform: uppercase;
+  letter-spacing: -.03em;
+  max-width: 15ch;
+}
+
+.titulo-gigante .destaque {
+  color: var(--sobre-acento);
+  background: var(--acento);
+  padding: 0 .12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.titulo-secao {
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  text-transform: uppercase;
+}
+
+.sobretitulo {
+  font-family: var(--fonte-mono);
+  font-size: .74rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  margin-bottom: .6rem;
+}
+
+.paragrafo {
+  color: var(--texto-suave);
+  max-width: 54ch;
+  margin-top: 1.1rem;
+  font-size: 1.02rem;
+}
+
+.paragrafo strong { color: var(--texto); font-weight: 600; }
+
+.cartao-titulo {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  margin-bottom: .9rem;
+}
+
+/* Faixa listrada usada como divisor gráfico. */
+.separador {
+  height: 10px;
+  margin: 2.6rem 0;
+  background-image: repeating-linear-gradient(
+    -45deg, var(--linha-forte) 0 2px, transparent 2px 9px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

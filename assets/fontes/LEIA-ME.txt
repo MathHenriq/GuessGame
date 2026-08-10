@@ -1,0 +1,4 @@
+Fontes Archivo e Archivo Black — Omnibus-Type.
+Licença: SIL Open Font License 1.1 (https://scripts.sil.org/OFL)
+Arquivos baixados do Google Fonts e mantidos aqui para que o jogo funcione
+offline, com a mesma tipografia, em qualquer computador da escola.
