@@ -181,7 +181,10 @@
 
     partida.dicas.slice(0, partida.dicasReveladas).forEach(function (dica, indice) {
       var cartao = ui.el('div', 'dica');
-      cartao.appendChild(ui.el('span', 'dica__rotulo', 'Dica ' + (indice + 1)));
+      // O rótulo diz que tipo de raciocínio a dica pede (Corte, Marco,
+      // Vizinho...), para o aluno saber o que fazer com ela.
+      cartao.appendChild(ui.el('span', 'dica__rotulo',
+        'Dica ' + (indice + 1) + (dica.rotulo ? ' · ' + dica.rotulo : '')));
       cartao.appendChild(ui.el('span', 'dica__texto', dica.texto));
       painel.appendChild(cartao);
     });

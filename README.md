@@ -147,9 +147,8 @@ Regras práticas:
   jogo mostra o resumo da Wikipédia ao revelar a resposta; sem dica autoral, ficam as automáticas.
   Quando escrever uma dica, não cite o nome do item.
 
-As dicas de século, região, gênero e popularidade são geradas sozinhas a partir dos campos, assim
-como a dica final ("Começa com a letra P e tem 9 letras"). Ou seja: cadastrar um item já entrega
-o conjunto completo de dicas.
+As dicas são geradas sozinhas a partir dos campos e da categoria inteira (veja a seção
+*Como as dicas são construídas*). Ou seja: cadastrar um item já entrega o conjunto completo delas.
 
 Depois de mexer na base, vale rodar a validação (opcional, requer Node.js):
 
@@ -221,6 +220,29 @@ Dica não é botão de emergência. Cada uma só destrava depois de um número d
 (2 por padrão): a primeira no 2º palpite, a segunda no 4º, e assim por diante. Enquanto está
 travada, o jogo mostra um cartão cinza dizendo quantos palpites faltam. O professor pode mudar essa
 exigência no campo **Palpites necessários por dica**.
+
+### Como as dicas são construídas
+Uma dica só vale se disser algo que o tabuleiro **não** diz. Como a dica só destrava depois de
+alguns palpites, repetir uma coluna ("Classe: mamífero") não ensinaria nada — a essa altura o aluno
+já descobriu isso chutando. Por isso o gerador (`assets/js/nucleo/dicas.js`) olha para a categoria
+inteira, coisa que nenhum palpite isolado revela:
+
+| Família | O que diz | O que o aluno precisa fazer |
+|---|---|---|
+| **Corte** | o maior grupo a que o item **não** pertence: "Em Dieta, ele não é *Carnívoro* — isso elimina 60 dos 169 itens" | pensar por conjuntos: riscar um bloco inteiro de uma vez |
+| **Marco** | onde ele cai entre itens conhecidos: "na linha do tempo, fica entre *Pac-Man* e *Minecraft*" | estimar a data dos marcos — e chutá-los, porque o tabuleiro mostra os anos |
+| **Vizinho** | o item mais parecido da categoria e em quantas características eles batem | chutar o vizinho e caçar exatamente onde os dois se separam |
+| **Sósia** | existe item com características idênticas às do secreto | perceber que a tabela não resolve tudo e decidir pelo repertório |
+| **Grupo pequeno** | o campo em que ele está numa minoria, sem dizer qual valor é | procurar os grupos minoritários da categoria |
+| **Origem** | a região de origem e quantos itens vêm de lá | localizar o continente e listar países dele |
+| **Época** | o século, com quantos itens dividem esse século | perceber se o recorte vale muito ou pouco |
+| **Alfabeto** | metade do alfabeto, número de letras e de palavras | eliminar por formato do nome, antes de saber a letra |
+| **Dica final** | a letra inicial | a rede de segurança de sempre |
+
+Nenhuma dica automática nomeia o item secreto nem entrega um valor exclusivo dele: elas fecham o
+cerco, quem fecha a conta é o aluno. A ordem vai da que mais elimina para a que menos elimina,
+porque o Difícil libera só duas — e famílias que não se aplicam ao tema (Marco sem campo de ano,
+Origem sem campo de país) somem da fila, com as seguintes subindo no lugar.
 
 ### Dificuldades
 **O jogador sempre pode chutar qualquer item da categoria** — como no LoLdle, onde todo campeão é um
