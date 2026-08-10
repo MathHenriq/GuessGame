@@ -24,7 +24,8 @@
     popularidade: ['Baixa', 'Média', 'Alta', 'Muito alta', 'Mundial'],
     porte: ['Muito pequeno', 'Pequeno', 'Médio', 'Grande', 'Gigante'],
     populacao: ['Muito pequena', 'Pequena', 'Média', 'Grande', 'Enorme'],
-    preco: ['Popular', 'Intermediário', 'Caro', 'Luxo', 'Exótico']
+    preco: ['Popular', 'Intermediário', 'Caro', 'Luxo', 'Exótico'],
+    raridade: ['Muito comum', 'Comum', 'Incomum', 'Raro', 'Muito raro']
   };
 
   /* ---------------------------------------------------------------------
@@ -85,7 +86,9 @@
     'Austrália': 'Oceania', 'Nova Zelândia': 'Oceania', 'Fiji': 'Oceania',
     'Papua-Nova Guiné': 'Oceania', 'Samoa': 'Oceania', 'Tonga': 'Oceania',
 
-    'Antártida': 'Antártida'
+    'Antártida': 'Antártida',
+    // Usado por alimentos e criações de origem antiga ou disputada.
+    'Vários países': 'Vários'
   };
 
   /* ---------------------------------------------------------------------
@@ -194,6 +197,9 @@
       resumo: def.resumo,
       // Palavra usada ao procurar a imagem do item ("Minecraft" -> "Minecraft jogo").
       contexto: def.contexto || '',
+      // 'geral' para categorias abrangentes, 'universo' para as temáticas
+      // (LoL, Naruto, Marvel...), que aparecem em uma faixa própria na tela.
+      grupo: def.grupo || 'geral',
       campos: def.campos,
       itens: []
     };

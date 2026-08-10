@@ -19,6 +19,7 @@
     {
       termos: ['marvel', 'vingadores', 'homem de ferro', 'homem aranha', 'thanos', 'hulk'],
       pacotes: [
+        { temaId: 'marvel', rotulo: 'Universo Marvel completo', termo: '' },
         { temaId: 'personagens', rotulo: 'Heróis e vilões dos quadrinhos', termo: 'quadrinhos' },
         { temaId: 'filmes', rotulo: 'Filmes de super-herói', termo: 'super-herói' },
         { temaId: 'atores', rotulo: 'Elenco dos blockbusters', termo: '' }
@@ -27,22 +28,27 @@
     {
       termos: ['harry potter', 'hogwarts', 'bruxo', 'magia'],
       pacotes: [
+        { temaId: 'harrypotter', rotulo: 'Mundo bruxo de Hogwarts', termo: '' },
         { temaId: 'livros', rotulo: 'Livros de fantasia', termo: 'fantasia' },
         { temaId: 'filmes', rotulo: 'Filmes de fantasia', termo: 'fantasia' },
         { temaId: 'personagens', rotulo: 'Personagens de livros', termo: 'livro' }
       ]
     },
     {
-      termos: ['futebol', 'bola', 'copa', 'flamengo', 'corinthians', 'gol'],
+      termos: ['futebol', 'bola', 'copa', 'flamengo', 'corinthians', 'gol', 'brasileirao', 'time'],
       pacotes: [
+        { temaId: 'brasileirao', rotulo: 'Clubes do futebol brasileiro', termo: '' },
         { temaId: 'jogadores', rotulo: 'Craques do futebol', termo: '' },
         { temaId: 'esportes', rotulo: 'Esportes coletivos', termo: 'coletivo' },
         { temaId: 'paises', rotulo: 'Países que amam futebol', termo: '' }
       ]
     },
     {
-      termos: ['anime', 'mangá', 'manga', 'otaku', 'naruto', 'one piece'],
+      termos: ['anime', 'mangá', 'manga', 'otaku', 'naruto', 'one piece', 'dragon ball', 'goku'],
       pacotes: [
+        { temaId: 'naruto', rotulo: 'Ninjas de Naruto', termo: '' },
+        { temaId: 'onepiece', rotulo: 'Piratas de One Piece', termo: '' },
+        { temaId: 'dragonball', rotulo: 'Guerreiros de Dragon Ball', termo: '' },
         { temaId: 'animes', rotulo: 'Animes clássicos e atuais', termo: '' },
         { temaId: 'personagens', rotulo: 'Personagens de anime', termo: 'anime' },
         { temaId: 'paises', rotulo: 'Ásia no mapa', termo: '' }
@@ -56,8 +62,12 @@
       ]
     },
     {
-      termos: ['games', 'game', 'videogame', 'jogar', 'minecraft', 'fortnite', 'free fire', 'roblox'],
+      termos: ['games', 'game', 'videogame', 'jogar', 'minecraft', 'fortnite', 'free fire',
+        'roblox', 'lol', 'league of legends', 'pokemon', 'pokémon'],
       pacotes: [
+        { temaId: 'lol', rotulo: 'Campeões do League of Legends', termo: '' },
+        { temaId: 'pokemon', rotulo: 'Pokémon de todas as gerações', termo: '' },
+        { temaId: 'minecraft', rotulo: 'Blocos, mobs e itens do Minecraft', termo: '' },
         { temaId: 'jogos', rotulo: 'Games de todas as épocas', termo: '' },
         { temaId: 'personagens', rotulo: 'Personagens de videogame', termo: 'jogo' },
         { temaId: 'empresas', rotulo: 'Empresas por trás dos jogos', termo: '' }

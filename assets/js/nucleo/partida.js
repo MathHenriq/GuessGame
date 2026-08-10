@@ -14,22 +14,47 @@
   GG.dificuldades = {
     facil: {
       id: 'facil', rotulo: 'Fácil', emoji: '🟢',
-      descricao: 'Cerca de 25 itens, os mais conhecidos, e bastante ajuda.',
+      descricao: 'A resposta é um dos 25 itens mais conhecidos.',
       tentativas: 8, dicas: 4, setas: true, palpitesPorDica: 2,
-      fatorTolerancia: 1.5, multiplicador: 0.8, limiteConjunto: 25
+      fatorTolerancia: 1.5, multiplicador: 0.8, limiteSorteio: 25
     },
     medio: {
       id: 'medio', rotulo: 'Médio', emoji: '🟡',
-      descricao: 'Cerca de 60 itens conhecidos, com setas de apoio.',
+      descricao: 'A resposta sai dos 60 itens mais conhecidos.',
       tentativas: 7, dicas: 3, setas: true, palpitesPorDica: 2,
-      fatorTolerancia: 1, multiplicador: 1, limiteConjunto: 60
+      fatorTolerancia: 1, multiplicador: 1, limiteSorteio: 60
     },
     dificil: {
       id: 'dificil', rotulo: 'Difícil', emoji: '🔴',
-      descricao: 'A categoria inteira, sem setas e com poucas dicas.',
+      descricao: 'A resposta pode ser qualquer item, sem setas e com poucas dicas.',
       tentativas: 6, dicas: 2, setas: false, palpitesPorDica: 2,
-      fatorTolerancia: 0.5, multiplicador: 1.5, limiteConjunto: 0, segredoObscuro: true
+      fatorTolerancia: 0.5, multiplicador: 1.5, limiteSorteio: 0, segredoObscuro: true
     }
+  };
+
+  /**
+   * Move itens para o começo da lista do tema.
+   * Serve para garantir que os óbvios (cachorro, arroz, Brasil...) entrem nos
+   * sorteios do fácil e do médio mesmo em temas sem campo de popularidade,
+   * onde a "fama" é simplesmente a ordem de cadastro.
+   */
+  GG.destacarItens = function (temaId, nomes) {
+    var tema = GG.indiceTemas[temaId];
+    if (!tema) throw new Error('Tema desconhecido ao destacar: ' + temaId);
+
+    var procurados = {};
+    nomes.forEach(function (nome, posicao) { procurados[GG.normalizar(nome)] = posicao; });
+
+    var destacados = [];
+    var restantes = [];
+    tema.itens.forEach(function (item) {
+      if (procurados[item.busca] !== undefined) destacados.push(item);
+      else restantes.push(item);
+    });
+
+    destacados.sort(function (a, b) { return procurados[a.busca] - procurados[b.busca]; });
+    tema.itens = destacados.concat(restantes);
+    return tema;
   };
 
   // "Fama" de um item: usada para montar o conjunto do modo fácil.
@@ -43,10 +68,6 @@
     return null;
   };
 
-  /**
-   * Conjunto de itens que participam da partida (respostas possíveis e
-   * também as opções que o jogador pode chutar).
-   */
   /**
    * Itens ordenados do mais conhecido para o menos conhecido.
    * Onde existe campo de popularidade, ele manda. Onde não existe (países,
@@ -63,15 +84,18 @@
   };
 
   /**
-   * Conjunto de itens da partida.
-   * Com uma base grande, o que separa as dificuldades é principalmente o
-   * TAMANHO do conjunto: o fácil joga com os mais conhecidos, o difícil joga
-   * com a categoria inteira.
+   * De onde SAI a resposta secreta.
+   * A dificuldade mexe só aqui: no fácil o item secreto vem dos mais
+   * conhecidos, no difícil pode ser qualquer um da categoria.
+   *
+   * O que o jogador pode CHUTAR é sempre a categoria inteira — como no LoLdle,
+   * onde qualquer campeão é um palpite válido. Foi o que corrigiu o problema de
+   * itens que existiam na base mas nunca apareciam para ninguém.
    */
-  GG.montarConjunto = function (tema, dificuldade) {
-    if (!dificuldade.limiteConjunto) return tema.itens.slice();
-    if (tema.itens.length <= dificuldade.limiteConjunto) return tema.itens.slice();
-    return GG.itensPorFama(tema).slice(0, dificuldade.limiteConjunto);
+  GG.montarSorteio = function (tema, dificuldade) {
+    if (!dificuldade.limiteSorteio) return tema.itens.slice();
+    if (tema.itens.length <= dificuldade.limiteSorteio) return tema.itens.slice();
+    return GG.itensPorFama(tema).slice(0, dificuldade.limiteSorteio);
   };
 
   /**
@@ -90,12 +114,19 @@
     if (!tema) throw new Error('Tema desconhecido: ' + config.temaId);
 
     var dificuldade = GG.dificuldades[config.dificuldade] || GG.dificuldades.medio;
-    var conjunto = GG.montarConjunto(tema, dificuldade);
+
+    // Chutar: sempre a categoria inteira. Sortear: depende da dificuldade.
+    var conjunto = tema.itens.slice();
+    var sorteio = GG.montarSorteio(tema, dificuldade);
 
     if (config.filtro) {
+      // O modo "Eu gosto de" restringe os dois conjuntos, mas só se sobrar jogo.
       var filtrado = conjunto.filter(config.filtro);
-      // Só aplica o filtro se ainda sobrar jogo suficiente.
-      if (filtrado.length >= 5) conjunto = filtrado;
+      if (filtrado.length >= 5) {
+        conjunto = filtrado;
+        var sorteioFiltrado = sorteio.filter(config.filtro);
+        sorteio = sorteioFiltrado.length >= 5 ? sorteioFiltrado : filtrado;
+      }
     }
 
     var segredo;
@@ -104,10 +135,10 @@
       if (segredo && conjunto.indexOf(segredo) === -1) conjunto = conjunto.concat([segredo]);
     }
     if (!segredo) {
-      var candidatos = conjunto;
+      var candidatos = sorteio;
       if (dificuldade.segredoObscuro) {
         // No difícil, o sorteio evita os itens mais óbvios do tema.
-        var menosObvios = conjunto.filter(function (item) {
+        var menosObvios = sorteio.filter(function (item) {
           var fama = GG.famaDoItem(tema, item);
           return fama === null || fama <= 4;
         });
@@ -122,6 +153,7 @@
       tema: tema,
       dificuldade: dificuldade,
       conjunto: conjunto.slice().sort(function (a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); }),
+      totalSorteio: sorteio.length,
       segredo: segredo,
       dicas: dicas,
       dicasMax: Math.min(config.dicasMax || dificuldade.dicas, dicas.length),

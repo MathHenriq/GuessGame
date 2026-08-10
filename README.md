@@ -1,6 +1,8 @@
 # 🎯 Guess Game
 
-Jogo educativo de dedução para a sala de aula, no estilo LoLdle/Wordle, com **19 categorias e 1.940 itens**.
+Jogo educativo de dedução para a sala de aula, no estilo LoLdle/Wordle, com **28 categorias e 2.847 itens**
+— 19 categorias abrangentes (Filmes, Animais, Países…) e 9 universos temáticos
+(League of Legends, Pokémon, Naruto, Marvel, Futebol brasileiro…).
 O aluno escolhe uma categoria, tenta adivinhar o item secreto e recebe um tabuleiro de peças coloridas
 comparando as características de cada palpite: 🟩 correto, 🟨 parcialmente correto, 🟥 errado.
 Ao acertar, o jogo mostra uma foto do item.
@@ -43,6 +45,10 @@ Qualquer navegador atual (Chrome, Edge, Firefox, Safari), no computador, tablet 
 ---
 
 ## 2. Como adicionar novos temas (categorias)
+
+Um tema pode ser **abrangente** (`grupo: 'geral'`, o padrão) ou um **universo temático**
+(`grupo: 'universo'`), que aparece na faixa "Entre em um universo" da tela inicial.
+
 
 Cada tema é um objeto passado para `GG.registrarTema(...)` dentro de um arquivo em
 `assets/js/dados/`. Um tema declara **quais características entram na tabela de comparação** e a
@@ -199,13 +205,19 @@ travada, o jogo mostra um cartão cinza dizendo quantos palpites faltam. O profe
 exigência no campo **Palpites necessários por dica**.
 
 ### Dificuldades
-Com quase 2 mil itens, o que separa as dificuldades é sobretudo o tamanho do conjunto em jogo:
+**O jogador sempre pode chutar qualquer item da categoria** — como no LoLdle, onde todo campeão é um
+palpite válido. A dificuldade muda apenas de onde sai a RESPOSTA:
 
-| Nível | Conjunto de itens | Tentativas | Dicas | Setas | Multiplicador |
+| Nível | A resposta sai de | Tentativas | Dicas | Setas | Multiplicador |
 |---|---|---|---|---|---|
-| 🟢 Fácil | ~25 mais conhecidos | 8 | 4 | sim | ×0,8 |
-| 🟡 Médio | ~60 mais conhecidos | 7 | 3 | sim | ×1 |
-| 🔴 Difícil | categoria inteira (até 128 itens), sorteio evitando os óbvios, tolerância menor | 6 | 2 | não | ×1,5 |
+| 🟢 Fácil | 25 itens mais conhecidos | 8 | 4 | sim | ×0,8 |
+| 🟡 Médio | 60 itens mais conhecidos | 7 | 3 | sim | ×1 |
+| 🔴 Difícil | qualquer item da categoria | 6 | 2 | não | ×1,5 |
+
+O ranking de "mais conhecidos" usa o campo de popularidade quando ele existe. Onde não existe
+(animais, países, carros, lugares…), vale a ordem de cadastro — e `assets/js/dados/destaques.js`
+promove na mão os itens que qualquer turma cita primeiro (cachorro, arroz, Flamengo, Pikachu…).
+Se algum óbvio nunca cair como resposta, é lá que se acrescenta o nome.
 
 ### Pontuação
 ```
@@ -274,6 +286,11 @@ assets/
       expansao-ficcao.js       +Animes, +Livros, +Personagens
       expansao-pessoas.js      +Músicos, +Jogadores, +Cientistas, +Históricos, +Artistas, +Atores
       expansao-mundo.js        +Países, +Lugares, +Animais, +Comidas, +Esportes, +Carros, +Empresas
+      expansao-basicos.js      O óbvio do dia a dia: arroz, feijão, cachorro, gato, pão…
+      especificos-games.js     League of Legends, Pokémon, Minecraft
+      especificos-animes.js    Naruto, One Piece, Dragon Ball
+      especificos-cultura.js   Harry Potter, Marvel, Futebol brasileiro
+      destaques.js             Quem entra nos sorteios de fácil e médio (carregar por último)
     ui/                        Interface, uma tela por arquivo
       comum.js, inicio.js, jogo.js, professor.js, ranking.js
     app.js                     Ponto de entrada
@@ -296,18 +313,16 @@ permite trocar o armazenamento local por uma API sem reescrever o jogo.
 
 ## Categorias incluídas
 
-| Categoria | Itens | | Categoria | Itens |
-|---|---:|---|---|---:|
-| 🎵 Músicos | 136 | | 🌎 Países | 118 |
-| 🎮 Jogos | 128 | | ⚽ Jogadores | 115 |
-| 🎬 Filmes | 123 | | 🍔 Comidas | 108 |
-| 🦸 Personagens fictícios | 119 | | 🏢 Empresas | 105 |
-| 🏛️ Personalidades históricas | 103 | | 🐾 Animais | 101 |
-| 📚 Livros | 97 | | 🎭 Atores e atrizes | 94 |
-| 🔬 Cientistas | 92 | | 📺 Séries | 91 |
-| 🧙 Animes | 90 | | 🗺️ Lugares | 86 |
-| 🚗 Carros | 84 | | 🏀 Esportes | 80 |
-| 🎨 Artistas | 70 | | **Total** | **1.940** |
+**Abrangentes (19)** — 🍔 Comidas 175 · 🐾 Animais 169 · 🎮 Jogos 144 · 🎵 Músicos 136 ·
+🏢 Empresas 130 · 🎬 Filmes 123 · 🦸 Personagens 119 · 🌎 Países 118 · ⚽ Jogadores 115 ·
+🗺️ Lugares 105 · 🏛️ Personalidades históricas 103 · 📚 Livros 97 · 🎭 Atores 94 ·
+🔬 Cientistas 92 · 📺 Séries 91 · 🏀 Esportes 90 · 🧙 Animes 90 · 🚗 Carros 84 · 🎨 Artistas 70
+
+**Universos temáticos (9)** — ⚡ Pokémon 129 · ⚔️ League of Legends 114 · ⛏️ Minecraft 91 ·
+🕷️ Marvel 78 · 🪄 Harry Potter 66 · 🍥 Naruto 61 · 🐉 Dragon Ball 57 · 🇧🇷 Futebol brasileiro 56 ·
+🏴‍☠️ One Piece 50
+
+**Total: 2.847 itens.**
 
 ## Licença
 

@@ -79,7 +79,11 @@
     caixa.appendChild(ui.el('span', 'chip',
       partida.dificuldade.emoji + ' ' + partida.dificuldade.rotulo));
     caixa.appendChild(ui.el('span', 'chip',
-      partida.conjunto.length + ' possibilidades'));
+      partida.conjunto.length + ' palpites possíveis'));
+    if (partida.totalSorteio < partida.conjunto.length) {
+      caixa.appendChild(ui.el('span', 'chip',
+        'resposta entre os ' + partida.totalSorteio + ' mais conhecidos'));
+    }
 
     if (config.rotuloFiltro) caixa.appendChild(ui.el('span', 'chip', config.rotuloFiltro));
     if (config.codigo) caixa.appendChild(ui.el('span', 'chip chip--alerta', 'Desafio do professor'));
@@ -247,15 +251,16 @@
     if (!partida || partida.estado !== 'jogando' || revelando) return;
 
     var alvo = GG.normalizar(texto);
-    var candidatos = GG.itensDisponiveis(partida);
+    // Nada de lista antes de digitar: a sugestão só aparece a partir da 1ª letra.
+    if (!alvo.length) return fecharAutocompletar();
 
-    if (alvo.length) {
-      candidatos = candidatos.filter(function (item) { return item.busca.indexOf(alvo) !== -1; });
-      // Quem começa com o texto digitado aparece primeiro.
-      candidatos.sort(function (a, b) {
-        return (a.busca.indexOf(alvo) - b.busca.indexOf(alvo)) || a.nome.localeCompare(b.nome, 'pt-BR');
-      });
-    }
+    var candidatos = GG.itensDisponiveis(partida).filter(function (item) {
+      return item.busca.indexOf(alvo) !== -1;
+    });
+    // Quem começa com o texto digitado aparece primeiro.
+    candidatos.sort(function (a, b) {
+      return (a.busca.indexOf(alvo) - b.busca.indexOf(alvo)) || a.nome.localeCompare(b.nome, 'pt-BR');
+    });
 
     opcoesVisiveis = candidatos.slice(0, 8);
     var lista = ui.limpar(ui.$('#autocompletar'));
@@ -468,7 +473,6 @@
     });
 
     entrada.addEventListener('input', function () { abrirAutocompletar(entrada.value); });
-    entrada.addEventListener('focus', function () { abrirAutocompletar(entrada.value); });
     entrada.addEventListener('blur', function () { window.setTimeout(fecharAutocompletar, 120); });
 
     entrada.addEventListener('keydown', function (evento) {

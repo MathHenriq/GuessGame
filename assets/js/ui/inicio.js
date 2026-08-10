@@ -8,34 +8,49 @@
 
   var ui = GG.ui;
 
-  var ATALHOS = ['Marvel', 'Futebol', 'Anime', 'Minecraft', 'Música', 'Animais', 'História', 'Comida'];
+  var ATALHOS = ['Marvel', 'Futebol', 'Naruto', 'Minecraft', 'League of Legends',
+    'Pokémon', 'Harry Potter', 'Animais', 'Comida'];
 
   /* ------------------------------------------------- GRADE DE CATEGORIAS */
+  function montarCartao(tema, indice) {
+    var cartao = ui.el('button', 'cartao-categoria');
+    cartao.type = 'button';
+    cartao.setAttribute('aria-label', 'Jogar categoria ' + tema.nome);
+
+    cartao.appendChild(ui.el('span', 'cartao-categoria__indice',
+      (indice + 1 < 10 ? '0' : '') + (indice + 1)));
+    cartao.appendChild(ui.el('span', 'cartao-categoria__emoji', tema.emoji));
+    cartao.appendChild(ui.el('span', 'cartao-categoria__nome', tema.nome));
+    cartao.appendChild(ui.el('span', 'cartao-categoria__meta', tema.itens.length + ' itens'));
+
+    cartao.addEventListener('click', function () {
+      GG.som.clique();
+      GG.ui.iniciarJogo({
+        temaId: tema.id,
+        dificuldade: ui.estado.dificuldade,
+        cronometro: ui.estado.cronometro
+      });
+    });
+
+    return cartao;
+  }
+
+  /** Duas faixas: categorias abrangentes e universos temáticos. */
   function montarGrade() {
     var grade = ui.limpar(ui.$('#grade-categorias'));
+    var universos = ui.limpar(ui.$('#grade-universos'));
+    var indiceGeral = 0;
+    var indiceUniverso = 0;
 
-    GG.temas.forEach(function (tema, indice) {
-      var cartao = ui.el('button', 'cartao-categoria');
-      cartao.type = 'button';
-      cartao.setAttribute('aria-label', 'Jogar categoria ' + tema.nome);
-
-      cartao.appendChild(ui.el('span', 'cartao-categoria__indice',
-        (indice + 1 < 10 ? '0' : '') + (indice + 1)));
-      cartao.appendChild(ui.el('span', 'cartao-categoria__emoji', tema.emoji));
-      cartao.appendChild(ui.el('span', 'cartao-categoria__nome', tema.nome));
-      cartao.appendChild(ui.el('span', 'cartao-categoria__meta', tema.itens.length + ' itens'));
-
-      cartao.addEventListener('click', function () {
-        GG.som.clique();
-        GG.ui.iniciarJogo({
-          temaId: tema.id,
-          dificuldade: ui.estado.dificuldade,
-          cronometro: ui.estado.cronometro
-        });
-      });
-
-      grade.appendChild(cartao);
+    GG.temas.forEach(function (tema) {
+      if (tema.grupo === 'universo') {
+        universos.appendChild(montarCartao(tema, indiceUniverso++));
+      } else {
+        grade.appendChild(montarCartao(tema, indiceGeral++));
+      }
     });
+
+    ui.$('#secao-universos').hidden = !universos.firstChild;
   }
 
   /* ------------------------------------------------ SELETOR DE DIFICULDADE */

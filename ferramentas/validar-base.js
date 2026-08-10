@@ -39,7 +39,12 @@ vm.createContext(contexto);
   'assets/js/dados/expansao-telas.js',
   'assets/js/dados/expansao-ficcao.js',
   'assets/js/dados/expansao-pessoas.js',
-  'assets/js/dados/expansao-mundo.js'
+  'assets/js/dados/expansao-mundo.js',
+  'assets/js/dados/expansao-basicos.js',
+  'assets/js/dados/especificos-games.js',
+  'assets/js/dados/especificos-animes.js',
+  'assets/js/dados/especificos-cultura.js',
+  'assets/js/dados/destaques.js'
 ].forEach(function (arquivo) {
   vm.runInContext(fs.readFileSync(path.join(raiz, arquivo), 'utf8'), contexto, { filename: arquivo });
 });
