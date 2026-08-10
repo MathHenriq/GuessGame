@@ -40,6 +40,7 @@
       dificuldade: config.dificuldade || 'medio',
       tentativas: config.tentativas,
       dicasMax: config.dicasMax,
+      palpitesPorDica: config.palpitesPorDica,
       cronometro: !!config.cronometro,
       itemId: config.itemId || null,
       codigo: true

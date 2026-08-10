@@ -14,21 +14,21 @@
   GG.dificuldades = {
     facil: {
       id: 'facil', rotulo: 'Fácil', emoji: '🟢',
-      descricao: 'Só os itens mais conhecidos e bastante ajuda.',
-      tentativas: 8, dicas: 4, setas: true,
-      fatorTolerancia: 1.5, multiplicador: 0.8, poolReduzido: true
+      descricao: 'Cerca de 25 itens, os mais conhecidos, e bastante ajuda.',
+      tentativas: 8, dicas: 4, setas: true, palpitesPorDica: 2,
+      fatorTolerancia: 1.5, multiplicador: 0.8, limiteConjunto: 25
     },
     medio: {
       id: 'medio', rotulo: 'Médio', emoji: '🟡',
-      descricao: 'Categoria inteira, com setas de apoio.',
-      tentativas: 6, dicas: 3, setas: true,
-      fatorTolerancia: 1, multiplicador: 1, poolReduzido: false
+      descricao: 'Cerca de 60 itens conhecidos, com setas de apoio.',
+      tentativas: 7, dicas: 3, setas: true, palpitesPorDica: 2,
+      fatorTolerancia: 1, multiplicador: 1, limiteConjunto: 60
     },
     dificil: {
       id: 'dificil', rotulo: 'Difícil', emoji: '🔴',
-      descricao: 'Itens parecidos, sem setas e com poucas dicas.',
-      tentativas: 5, dicas: 2, setas: false,
-      fatorTolerancia: 0.5, multiplicador: 1.35, poolReduzido: false, segredoObscuro: true
+      descricao: 'A categoria inteira, sem setas e com poucas dicas.',
+      tentativas: 6, dicas: 2, setas: false, palpitesPorDica: 2,
+      fatorTolerancia: 0.5, multiplicador: 1.5, limiteConjunto: 0, segredoObscuro: true
     }
   };
 
@@ -47,18 +47,31 @@
    * Conjunto de itens que participam da partida (respostas possíveis e
    * também as opções que o jogador pode chutar).
    */
+  /**
+   * Itens ordenados do mais conhecido para o menos conhecido.
+   * Onde existe campo de popularidade, ele manda. Onde não existe (países,
+   * animais, carros...), vale a ordem do arquivo — que é cadastrada do mais
+   * famoso para o mais raro.
+   */
+  GG.itensPorFama = function (tema) {
+    return tema.itens.map(function (item, indice) {
+      return { item: item, indice: indice, fama: GG.famaDoItem(tema, item) };
+    }).sort(function (a, b) {
+      if (a.fama !== b.fama && a.fama !== null && b.fama !== null) return b.fama - a.fama;
+      return a.indice - b.indice;
+    }).map(function (registro) { return registro.item; });
+  };
+
+  /**
+   * Conjunto de itens da partida.
+   * Com uma base grande, o que separa as dificuldades é principalmente o
+   * TAMANHO do conjunto: o fácil joga com os mais conhecidos, o difícil joga
+   * com a categoria inteira.
+   */
   GG.montarConjunto = function (tema, dificuldade) {
-    if (!dificuldade.poolReduzido) return tema.itens.slice();
-
-    // Temas sem campo de popularidade (países, animais, carros...) usam os
-    // primeiros itens do arquivo, cadastrados do mais conhecido ao mais raro.
-    if (GG.famaDoItem(tema, tema.itens[0]) === null) return tema.itens.slice(0, 12);
-
-    var famosos = tema.itens.filter(function (item) {
-      return GG.famaDoItem(tema, item) >= 4;
-    });
-    if (famosos.length < 8) famosos = tema.itens.slice(0, 12);
-    return famosos;
+    if (!dificuldade.limiteConjunto) return tema.itens.slice();
+    if (tema.itens.length <= dificuldade.limiteConjunto) return tema.itens.slice();
+    return GG.itensPorFama(tema).slice(0, dificuldade.limiteConjunto);
   };
 
   /**
@@ -113,6 +126,9 @@
       dicas: dicas,
       dicasMax: Math.min(config.dicasMax || dificuldade.dicas, dicas.length),
       dicasReveladas: 0,
+      // Pré-requisito: cada dica só destrava depois de N palpites dados.
+      // A ideia é que o aluno pense antes de pedir ajuda.
+      palpitesPorDica: config.palpitesPorDica || dificuldade.palpitesPorDica,
       tentativasMax: config.tentativas || dificuldade.tentativas,
       tentativas: [],
       cronometro: !!config.cronometro,
@@ -144,9 +160,31 @@
     return avaliacao;
   };
 
-  /** Libera a próxima dica, se ainda houver. */
+  /**
+   * Quantas dicas o jogador CONQUISTOU até agora.
+   * Dica não é botão de emergência: cada uma custa palpites pensados.
+   */
+  GG.dicasConquistadas = function (partida) {
+    var porPalpites = Math.floor(partida.tentativas.length / partida.palpitesPorDica);
+    return Math.min(partida.dicasMax, porPalpites);
+  };
+
+  /** Quantos palpites ainda faltam para destravar a próxima dica. */
+  GG.palpitesParaProximaDica = function (partida) {
+    if (partida.dicasReveladas >= partida.dicasMax) return 0;
+    var necessarios = (partida.dicasReveladas + 1) * partida.palpitesPorDica;
+    return Math.max(0, necessarios - partida.tentativas.length);
+  };
+
+  GG.podePedirDica = function (partida) {
+    return partida.estado === 'jogando' &&
+      partida.dicasReveladas < partida.dicasMax &&
+      partida.dicasReveladas < GG.dicasConquistadas(partida);
+  };
+
+  /** Libera a próxima dica, se ela já tiver sido conquistada. */
   GG.revelarDica = function (partida) {
-    if (partida.dicasReveladas >= partida.dicasMax) return null;
+    if (!GG.podePedirDica(partida)) return null;
     var dica = partida.dicas[partida.dicasReveladas];
     partida.dicasReveladas++;
     return dica;

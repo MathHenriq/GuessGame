@@ -35,13 +35,20 @@ vm.createContext(contexto);
   'assets/js/dados/entretenimento.js',
   'assets/js/dados/pessoas.js',
   'assets/js/dados/mundo.js',
-  'assets/js/dados/objetos.js'
+  'assets/js/dados/objetos.js',
+  'assets/js/dados/expansao-telas.js',
+  'assets/js/dados/expansao-ficcao.js',
+  'assets/js/dados/expansao-pessoas.js',
+  'assets/js/dados/expansao-mundo.js'
 ].forEach(function (arquivo) {
   vm.runInContext(fs.readFileSync(path.join(raiz, arquivo), 'utf8'), contexto, { filename: arquivo });
 });
 
 var GG = contexto.GG;
 var problemas = [];
+var semCuriosidade = 0;
+var semDica = 0;
+var nomesPorTema = {};
 
 function anotar(tema, item, mensagem) {
   problemas.push(tema.id + ' → ' + item.nome + ': ' + mensagem);
@@ -53,7 +60,13 @@ GG.temas.forEach(function (tema) {
   console.log('  ' + tema.emoji + ' ' + tema.nome.padEnd(26) +
     String(tema.itens.length).padStart(3) + ' itens · ' + tema.campos.length + ' campos');
 
+  nomesPorTema[tema.id] = {};
+
   tema.itens.forEach(function (item) {
+    var chave = item.nome.toLowerCase();
+    if (nomesPorTema[tema.id][chave]) anotar(tema, item, 'nome repetido dentro do tema');
+    nomesPorTema[tema.id][chave] = true;
+
     tema.campos.forEach(function (campo) {
       var valor = item.valores[campo.chave];
 
@@ -73,9 +86,11 @@ GG.temas.forEach(function (tema) {
       }
     });
 
-    if (!item.curiosidades) anotar(tema, item, 'sem curiosidade');
-    if (!item.dicasAutorais.length) anotar(tema, item, 'sem dica');
-    if (GG.gerarDicas(tema, item).length < 4) anotar(tema, item, 'gerou menos de 4 dicas');
+    // Curiosidade e dica autoral são opcionais (o jogo cobre a ausência com
+    // dicas automáticas e com o resumo da Wikipédia), então entram como aviso.
+    if (!item.curiosidades) semCuriosidade++;
+    if (!item.dicasAutorais.length) semDica++;
+    if (GG.gerarDicas(tema, item).length < 3) anotar(tema, item, 'gerou menos de 3 dicas');
   });
 
   // Simula uma partida em cada dificuldade para pegar erros de configuração.
@@ -90,6 +105,9 @@ GG.temas.forEach(function (tema) {
   });
 });
 
+console.log('');
+console.log('Sem curiosidade cadastrada: ' + semCuriosidade + '  |  sem dica autoral: ' + semDica +
+  '  (opcional — o jogo cobre com dicas automáticas e com a Wikipédia)');
 console.log('');
 if (problemas.length) {
   console.log('✖ ' + problemas.length + ' problema(s) encontrado(s):');

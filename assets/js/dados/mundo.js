@@ -13,6 +13,7 @@
   /* --------------------------------------------------------------- PAÍSES */
   GG.registrarTema({
     id: 'paises',
+    contexto: 'país',
     nome: 'Países',
     emoji: '🌎',
     resumo: 'Geografia, idiomas e moedas dos cinco continentes.',
@@ -54,6 +55,7 @@
   /* -------------------------------------------------------------- LUGARES */
   GG.registrarTema({
     id: 'lugares',
+    contexto: 'ponto turístico',
     nome: 'Lugares',
     emoji: '🗺️',
     resumo: 'Monumentos, ruínas e maravilhas naturais para viajar sem sair da sala.',
@@ -92,6 +94,7 @@
   /* -------------------------------------------------------------- ANIMAIS */
   GG.registrarTema({
     id: 'animais',
+    contexto: 'animal',
     nome: 'Animais',
     emoji: '🐾',
     resumo: 'Da savana ao fundo do mar: classes, habitats e dietas.',
@@ -134,6 +137,7 @@
   /* -------------------------------------------------------------- COMIDAS */
   GG.registrarTema({
     id: 'comidas',
+    contexto: 'culinária',
     nome: 'Comidas',
     emoji: '🍔',
     resumo: 'Pratos típicos, lanches e sobremesas do mundo todo.',
@@ -176,6 +180,7 @@
   /* ------------------------------------------------------------- ESPORTES */
   GG.registrarTema({
     id: 'esportes',
+    contexto: 'esporte',
     nome: 'Esportes',
     emoji: '🏀',
     resumo: 'Modalidades olímpicas, radicais e tradicionais.',

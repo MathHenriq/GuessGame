@@ -9,6 +9,7 @@
   /* --------------------------------------------------------------- CARROS */
   GG.registrarTema({
     id: 'carros',
+    contexto: 'automóvel',
     nome: 'Carros',
     emoji: '🚗',
     resumo: 'Populares, esportivos e clássicos que viraram cultura pop.',
@@ -48,6 +49,7 @@
   /* ------------------------------------------------------------- EMPRESAS */
   GG.registrarTema({
     id: 'empresas',
+    contexto: 'empresa',
     nome: 'Empresas',
     emoji: '🏢',
     resumo: 'Marcas que fazem parte do dia a dia — e como elas começaram.',

@@ -42,6 +42,11 @@
 
 .botao:disabled { opacity: .45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
+/* Enquanto as peças viram, o formulário fica "respirando": ninguém chuta em
+   cima do resultado anterior. */
+.palpite--revelando .entrada { border-color: var(--linha); opacity: .7; }
+.palpite--revelando { pointer-events: none; }
+
 .botao__contagem {
   font-family: var(--fonte-mono);
   font-size: .72rem;
@@ -311,68 +316,125 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 .dica__texto { font-size: .95rem; }
 
+/* Dica ainda não conquistada: aparece apagada, mostrando o que falta fazer. */
+.dica--bloqueada { border-left-color: var(--linha-forte); opacity: .75; }
+.dica--bloqueada .dica__rotulo { color: var(--texto-suave); }
+.dica--bloqueada .dica__texto { color: var(--texto-suave); font-style: italic; }
+
+.campo__ajuda { font-size: .78rem; color: var(--texto-suave); line-height: 1.4; }
+
 @keyframes surgir {
   from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: none; }
 }
 
-/* ---------------------------------------------------------------- TABELA */
-.tabela-palpites { min-width: 640px; font-size: .9rem; }
+/* ------------------------------------------------------------- TABULEIRO */
+/* Peças quadradas em grade, no espírito do LoLdle: cada característica é um
+   quadro que vira sozinho, da esquerda para a direita. */
 
-.tabela-palpites thead th {
-  position: sticky;
-  top: 0;
-  background: var(--tinta-3);
+.tabuleiro { --colunas: 6; min-width: min-content; }
+
+.tabuleiro__cabecalho,
+.linha-palpite {
+  display: grid;
+  grid-template-columns: repeat(var(--colunas), minmax(104px, 1fr));
+  gap: 8px;
+}
+
+.tabuleiro__cabecalho { margin-bottom: 8px; }
+.tabuleiro__linhas { display: grid; gap: 8px; }
+
+.tabuleiro__rotulo {
   font-family: var(--fonte-mono);
-  font-size: .66rem;
+  font-size: .62rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: .1em;
   color: var(--texto-suave);
-  text-align: left;
-  padding: .7rem .8rem;
-  border-bottom: 1px solid var(--linha);
-  white-space: nowrap;
+  text-align: center;
+  padding: 0 .25rem;
+  align-self: end;
+  line-height: 1.3;
 }
 
-.tabela-palpites tbody td { padding: 0; border-bottom: 1px solid var(--linha); }
-.tabela-palpites tbody tr:last-child td { border-bottom: none; }
-
-.celula {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  min-height: 58px;
-  padding: .5rem .8rem;
-  font-weight: 600;
-  line-height: 1.25;
-  /* Anima como as peças do Wordle: gira e "assenta". */
-  animation: virar 420ms cubic-bezier(.2, .8, .3, 1) both;
-}
-
-.celula--nome {
-  background: var(--tinta-3);
-  font-family: var(--fonte-display);
+.peca {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-height: 104px;
+  display: grid;
+  place-content: center;
+  gap: .2rem;
+  padding: .5rem .45rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: .82rem;
+  line-height: 1.2;
   text-transform: uppercase;
-  font-size: .9rem;
   letter-spacing: -.01em;
-  border-right: 1px solid var(--linha);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--tinta-3);
+  border: 1px solid var(--linha);
+  /* A virada é longa de propósito: dá tempo de ler cada resultado. */
+  animation: virar 620ms cubic-bezier(.2, .8, .3, 1) both;
 }
 
-.celula--certo { background: var(--certo); color: var(--sobre-cor); }
-.celula--quase { background: var(--quase); color: var(--sobre-cor); }
-.celula--errado { background: color-mix(in srgb, var(--errado) 16%, transparent); color: var(--texto); }
+.peca--certo { background: var(--certo); color: var(--sobre-cor); border-color: transparent; }
+.peca--quase { background: var(--quase); color: var(--sobre-cor); border-color: transparent; }
+.peca--errado { background: color-mix(in srgb, var(--errado) 20%, var(--tinta-3)); color: var(--texto); }
 
-.celula__seta { margin-left: auto; font-size: 1rem; opacity: .85; }
-.celula__detalhe { font-family: var(--fonte-mono); font-size: .62rem; opacity: .75; text-transform: uppercase; }
+.peca--nome {
+  background: var(--tinta-2);
+  border-color: var(--linha-forte);
+  font-family: var(--fonte-display);
+  font-size: .8rem;
+}
+
+.peca__ordem {
+  font-family: var(--fonte-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+  letter-spacing: .08em;
+}
+
+.peca__detalhe {
+  font-family: var(--fonte-mono);
+  font-size: .58rem;
+  font-weight: 500;
+  opacity: .8;
+  letter-spacing: .04em;
+}
+
+/* Seta grande ao fundo da peça, como nos jogos de dedução numérica. */
+.peca__seta {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 3.4rem;
+  font-weight: 700;
+  opacity: .22;
+  pointer-events: none;
+}
+
+.linha-palpite--acerto .peca--nome {
+  background: var(--acento);
+  color: var(--sobre-acento);
+  border-color: var(--acento);
+  animation: pulsar 900ms ease-out 1;
+}
 
 @keyframes virar {
-  0% { opacity: 0; transform: rotateX(-90deg); }
-  60% { opacity: 1; }
+  0% { opacity: 0; transform: rotateX(-88deg) scale(.94); }
+  55% { opacity: 1; transform: rotateX(12deg) scale(1.02); }
   100% { opacity: 1; transform: none; }
 }
 
-.linha-acerto .celula--nome { background: var(--acento); color: var(--sobre-acento); }
+@keyframes pulsar {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  40% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--acento) 35%, transparent); }
+}
 
 .tabela-vazia { padding: 2.2rem 1.5rem; text-align: center; color: var(--texto-suave); font-size: .92rem; }
 
@@ -416,6 +478,81 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 .confete { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; }
 .confete.ativo { opacity: 1; }
+
+/* Cada bloco do resultado entra em sequência: a vitória "assenta" em vez de
+   estourar tudo de uma vez na cara do aluno. */
+.resultado [data-etapa] { animation: aparecer 420ms cubic-bezier(.2, .8, .3, 1) both; }
+.resultado [data-etapa="1"] { animation-delay: 0ms; }
+.resultado [data-etapa="2"] { animation-delay: 180ms; }
+.resultado [data-etapa="3"] { animation-delay: 300ms; }
+.resultado [data-etapa="4"] { animation-delay: 460ms; }
+.resultado [data-etapa="5"] { animation-delay: 620ms; }
+.resultado [data-etapa="6"] { animation-delay: 820ms; }
+.resultado [data-etapa="7"] { animation-delay: 980ms; }
+.resultado [data-etapa="8"] { animation-delay: 1150ms; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------- FOTO DO ITEM SECRETO */
+.foto {
+  position: relative;
+  margin: 0 0 1.2rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: var(--tinta-3);
+  border: 1px solid var(--linha);
+}
+
+.foto__espaco {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 3.4rem;
+}
+
+/* Enquanto a imagem carrega, uma faixa clara atravessa o espaço vazio. */
+.foto--carregando .foto__espaco::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, var(--trama) 50%, transparent 80%);
+  animation: varrer 1.4s linear infinite;
+}
+
+@keyframes varrer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.foto__imagem {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: aparecer 500ms ease-out both;
+}
+
+.foto__credito {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: .25rem .5rem;
+  font-family: var(--fonte-mono);
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--texto);
+  background: color-mix(in srgb, var(--tinta) 78%, transparent);
+  border-top-left-radius: var(--raio);
+}
+
+.foto__credito:empty { display: none; }
 
 .resultado__selo {
   font-family: var(--fonte-mono);
@@ -531,8 +668,12 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 
 /* ------------------------------------------------ AJUSTES PARA CELULARES */
 @media (max-width: 720px) {
-  .tabela-palpites { min-width: 560px; font-size: .84rem; }
-  .celula { min-height: 50px; padding: .45rem .6rem; }
+  .tabuleiro__cabecalho,
+  .linha-palpite { grid-template-columns: repeat(var(--colunas), minmax(84px, 1fr)); gap: 6px; }
+  .peca { min-height: 84px; font-size: .72rem; padding: .4rem .3rem; }
+
+  .peca__seta { font-size: 2.6rem; }
+  .tabuleiro-envolucro { padding: .75rem; }
   .resultado { padding: 1.3rem; }
   .resultado__titulo { font-size: 1.6rem; }
   .historico__linha { grid-template-columns: auto 1fr auto; }

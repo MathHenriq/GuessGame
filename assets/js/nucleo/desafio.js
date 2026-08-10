@@ -13,7 +13,8 @@
   'use strict';
 
   // Chaves curtas para o código não ficar gigante.
-  var MAPA = { temaId: 't', dificuldade: 'd', tentativas: 'n', dicasMax: 'h', cronometro: 'c', itemId: 'i', titulo: 'g' };
+  var MAPA = { temaId: 't', dificuldade: 'd', tentativas: 'n', dicasMax: 'h',
+    cronometro: 'c', itemId: 'i', palpitesPorDica: 'r', titulo: 'g' };
 
   function paraSeguro(base64) {
     return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');

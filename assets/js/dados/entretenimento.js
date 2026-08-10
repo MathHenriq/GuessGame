@@ -15,6 +15,7 @@
   /* ----------------------------------------------------------------- JOGOS */
   GG.registrarTema({
     id: 'jogos',
+    contexto: 'jogo eletrônico',
     nome: 'Jogos',
     emoji: '🎮',
     resumo: 'Consoles, PC e celular — dos clássicos de fliperama aos fenômenos atuais.',
@@ -57,6 +58,7 @@
   /* ---------------------------------------------------------------- FILMES */
   GG.registrarTema({
     id: 'filmes',
+    contexto: 'filme',
     nome: 'Filmes',
     emoji: '🎬',
     resumo: 'Clássicos, animações e blockbusters que marcaram gerações.',
@@ -94,6 +96,7 @@
   /* ---------------------------------------------------------------- SÉRIES */
   GG.registrarTema({
     id: 'series',
+    contexto: 'série de televisão',
     nome: 'Séries',
     emoji: '📺',
     resumo: 'Da TV aberta ao streaming: histórias contadas em temporadas.',
@@ -131,6 +134,7 @@
   /* ---------------------------------------------------------------- ANIMES */
   GG.registrarTema({
     id: 'animes',
+    contexto: 'anime',
     nome: 'Animes',
     emoji: '🧙',
     resumo: 'Animação japonesa: dos clássicos da TV aberta aos hits do streaming.',
@@ -168,6 +172,7 @@
   /* ---------------------------------------------------------------- LIVROS */
   GG.registrarTema({
     id: 'livros',
+    contexto: 'livro',
     nome: 'Livros',
     emoji: '📚',
     resumo: 'Clássicos da literatura brasileira e mundial, além dos best-sellers juvenis.',
@@ -205,6 +210,7 @@
   /* --------------------------------------------------- PERSONAGENS FICTÍCIOS */
   GG.registrarTema({
     id: 'personagens',
+    contexto: 'personagem fictício',
     nome: 'Personagens fictícios',
     emoji: '🦸',
     resumo: 'Heróis, vilões e mascotes que saíram de livros, telas e consoles.',

@@ -133,11 +133,11 @@
         <div class="dicas" id="painel-dicas" hidden></div>
       </div>
 
-      <div class="tabela-envolucro">
-        <table class="tabela-palpites" id="tabela-palpites">
-          <thead id="tabela-cabecalho"></thead>
-          <tbody id="tabela-corpo"></tbody>
-        </table>
+      <div class="tabuleiro-envolucro">
+        <div class="tabuleiro" id="tabuleiro">
+          <div class="tabuleiro__cabecalho" id="tabuleiro-cabecalho"></div>
+          <div class="tabuleiro__linhas" id="tabuleiro-linhas"></div>
+        </div>
         <p class="tabela-vazia" id="tabela-vazia">
           Nenhum palpite ainda. Dê o primeiro chute — mesmo um palpite “errado” entrega muita informação.
         </p>
@@ -186,6 +186,12 @@
               <input class="entrada" type="number" id="prof-dicas" min="0" max="6" value="3">
             </label>
           </div>
+
+          <label class="campo">
+            <span class="campo__rotulo">Palpites necessários por dica</span>
+            <input class="entrada" type="number" id="prof-requisito" min="1" max="5" value="2">
+            <span class="campo__ajuda">O aluno só destrava a 1ª dica depois desse número de palpites, a 2ª depois do dobro, e assim por diante.</span>
+          </label>
 
           <label class="campo">
             <span class="campo__rotulo">Item secreto</span>
@@ -263,18 +269,28 @@
   <div class="cortina" id="cortina" hidden>
     <div class="resultado" role="dialog" aria-modal="true" aria-labelledby="resultado-titulo">
       <canvas class="confete" id="confete" aria-hidden="true"></canvas>
-      <p class="resultado__selo" id="resultado-selo">Fim de jogo</p>
-      <h2 class="resultado__titulo" id="resultado-titulo">Você acertou!</h2>
-      <div class="resultado__item" id="resultado-item"></div>
-      <div class="resultado__curiosidade" id="resultado-curiosidade"></div>
-      <div class="resultado__pontos">
+
+      <figure class="foto" id="resultado-foto" data-etapa="1">
+        <div class="foto__espaco" id="foto-espaco" aria-hidden="true">🎯</div>
+        <img class="foto__imagem" id="foto-imagem" alt="" hidden>
+        <figcaption class="foto__credito" id="foto-credito"></figcaption>
+      </figure>
+
+      <p class="resultado__selo" id="resultado-selo" data-etapa="2">Fim de jogo</p>
+      <h2 class="resultado__titulo" id="resultado-titulo" data-etapa="3">Você acertou!</h2>
+      <div class="resultado__item" id="resultado-item" data-etapa="4"></div>
+      <div class="resultado__curiosidade" id="resultado-curiosidade" data-etapa="5"></div>
+
+      <div class="resultado__pontos" data-etapa="6">
         <span class="resultado__pontos-valor" id="resultado-pontos">0</span>
         <span class="resultado__pontos-rotulo">pontos</span>
       </div>
-      <ul class="resultado__detalhes" id="resultado-detalhes"></ul>
-      <div class="resultado__botoes">
+      <ul class="resultado__detalhes" id="resultado-detalhes" data-etapa="7"></ul>
+
+      <div class="resultado__botoes" data-etapa="8">
         <button type="button" class="botao botao--acento botao--grande" id="btn-jogar-novamente">Jogar de novo</button>
-        <button type="button" class="botao botao--contorno" data-ir="inicio">Trocar categoria</button>
+        <a class="botao botao--contorno" id="btn-google" href="#" target="_blank" rel="noopener noreferrer">Ver no Google Imagens</a>
+        <button type="button" class="botao botao--fantasma" data-ir="inicio">Trocar categoria</button>
       </div>
     </div>
   </div>
@@ -290,6 +306,7 @@
   <script src="assets/js/nucleo/armazenamento.js"></script>
   <script src="assets/js/nucleo/sugestoes.js"></script>
   <script src="assets/js/nucleo/desafio.js"></script>
+  <script src="assets/js/nucleo/imagens.js"></script>
   <script src="assets/js/nucleo/efeitos.js"></script>
 
   <!-- Base de dados: um arquivo por família de temas -->
@@ -297,6 +314,10 @@
   <script src="assets/js/dados/pessoas.js"></script>
   <script src="assets/js/dados/mundo.js"></script>
   <script src="assets/js/dados/objetos.js"></script>
+  <script src="assets/js/dados/expansao-telas.js"></script>
+  <script src="assets/js/dados/expansao-ficcao.js"></script>
+  <script src="assets/js/dados/expansao-pessoas.js"></script>
+  <script src="assets/js/dados/expansao-mundo.js"></script>
 
   <!-- Interface -->
   <script src="assets/js/ui/comum.js"></script>

@@ -1,8 +1,9 @@
 # 🎯 Guess Game
 
-Jogo educativo de dedução para a sala de aula, no estilo Wordle/LoLdle, com **19 categorias e 420 itens**.
-O aluno escolhe uma categoria, tenta adivinhar o item secreto e recebe uma tabela colorida comparando
-as características de cada palpite: 🟩 correto, 🟨 parcialmente correto, 🟥 errado.
+Jogo educativo de dedução para a sala de aula, no estilo LoLdle/Wordle, com **19 categorias e 1.940 itens**.
+O aluno escolhe uma categoria, tenta adivinhar o item secreto e recebe um tabuleiro de peças coloridas
+comparando as características de cada palpite: 🟩 correto, 🟨 parcialmente correto, 🟥 errado.
+Ao acertar, o jogo mostra uma foto do item.
 
 Trabalha raciocínio lógico, levantamento de hipóteses, eliminação de possibilidades, pensamento
 computacional e argumentação.
@@ -92,8 +93,12 @@ Nada mais precisa ser alterado.
 
 ## 3. Como adicionar novos itens
 
-Abra o arquivo do tema em `assets/js/dados/`, **copie a última linha da lista `itens`, troque os
-valores e salve**. A ordem das colunas é sempre:
+Os arquivos `assets/js/dados/expansao-*.js` existem justamente para isso: eles chamam
+`GG.adicionarItens('temaId', [ ... ])` e acrescentam itens a um tema já registrado, sem repetir a
+declaração dos campos. Você pode editar um deles ou criar o seu (lembrando de incluir o `<script>`
+no `index.html`).
+
+**Copie a última linha da lista, troque os valores e salve.** A ordem das colunas é sempre:
 
 ```
 [ nome, ...valores dos campos declarados..., curiosidade, dica ]
@@ -114,8 +119,9 @@ Regras práticas:
 * **Popularidade e outras escalas** vão de 1 a 5 — o texto ("Muito alta") é gerado automaticamente.
 * **Países** precisam estar em `GG.continentes` (`assets/js/nucleo/base.js`). Se for um país novo,
   acrescente uma linha lá: `'Peru': 'América do Sul'`.
-* **Curiosidade** aparece no fim da partida; **dica** entra na sequência de dicas progressivas.
-  Escreva a dica sem citar o nome do item.
+* **Curiosidade e dica são opcionais** — pode terminar a linha na popularidade. Sem curiosidade, o
+  jogo mostra o resumo da Wikipédia ao revelar a resposta; sem dica autoral, ficam as automáticas.
+  Quando escrever uma dica, não cite o nome do item.
 
 As dicas de século, região, gênero e popularidade são geradas sozinhas a partir dos campos, assim
 como a dica final ("Começa com a letra P e tem 9 letras"). Ou seja: cadastrar um item já entrega
@@ -173,12 +179,33 @@ Cada palpite vira uma linha da tabela. Todos os campos do tema são comparados d
 regras da tabela de tipos acima. As setas ↑ ↓ aparecem em campos numéricos e ordinais nos níveis
 Fácil e Médio.
 
+### Ritmo
+As peças viram uma de cada vez, da esquerda para a direita, e o formulário fica travado enquanto isso
+acontece. É proposital: o aluno lê o resultado antes de poder chutar de novo, em vez de metralhar
+palpites. Depois da última peça há uma pausa antes do resultado, e o próprio resultado aparece em
+etapas — foto, resposta, curiosidade, pontos. Para mexer nesse ritmo, altere as três constantes no
+topo de `assets/js/ui/jogo.js`:
+
+```js
+var ATRASO_ENTRE_PECAS = 300;   // intervalo entre uma peça e a próxima
+var DURACAO_DA_PECA = 620;      // duração da virada (igual à do CSS)
+var PAUSA_ANTES_DO_FIM = 1100;  // respiro entre a última peça e o resultado
+```
+
+### Dicas conquistadas
+Dica não é botão de emergência. Cada uma só destrava depois de um número de palpites
+(2 por padrão): a primeira no 2º palpite, a segunda no 4º, e assim por diante. Enquanto está
+travada, o jogo mostra um cartão cinza dizendo quantos palpites faltam. O professor pode mudar essa
+exigência no campo **Palpites necessários por dica**.
+
 ### Dificuldades
+Com quase 2 mil itens, o que separa as dificuldades é sobretudo o tamanho do conjunto em jogo:
+
 | Nível | Conjunto de itens | Tentativas | Dicas | Setas | Multiplicador |
 |---|---|---|---|---|---|
-| 🟢 Fácil | só os mais conhecidos | 8 | 4 | sim | ×0,8 |
-| 🟡 Médio | categoria inteira | 6 | 3 | sim | ×1 |
-| 🔴 Difícil | categoria inteira, com sorteio evitando os óbvios e tolerância menor | 5 | 2 | não | ×1,35 |
+| 🟢 Fácil | ~25 mais conhecidos | 8 | 4 | sim | ×0,8 |
+| 🟡 Médio | ~60 mais conhecidos | 7 | 3 | sim | ×1 |
+| 🔴 Difícil | categoria inteira (até 128 itens), sorteio evitando os óbvios, tolerância menor | 6 | 2 | não | ×1,5 |
 
 ### Pontuação
 ```
@@ -194,9 +221,22 @@ O aluno digita algo que curte e o sistema procura o termo na base inteira — no
 países e curiosidades — devolvendo categorias e desafios filtrados. Assuntos muito pedidos (Marvel,
 futebol, anime, K-pop, games...) têm pacotes com nome próprio em `assets/js/nucleo/sugestoes.js`.
 
+### Foto do item secreto
+Ao revelar a resposta, o jogo busca automaticamente uma imagem e um resumo na **Wikipédia**
+(API pública, com CORS liberado, sem chave, imagens de licença livre) e mostra um botão
+**Ver no Google Imagens** para quem quiser ver mais.
+
+Não é a API do Google Imagens porque ela não existe de forma pública e gratuita: a Custom Search
+exige chave, cadastro de faturamento e tem cota diária baixa — e uma chave dessas não pode ficar
+dentro de um site estático, já que qualquer aluno leria o código-fonte. Raspar a página de resultados
+do Google também é bloqueado por CORS no navegador.
+
+Sem internet nada quebra: aparece o emoji da categoria no lugar da foto. As imagens já buscadas
+ficam em cache no navegador. Toda essa lógica está em `assets/js/nucleo/imagens.js`.
+
 ### Modo professor
-Escolha categoria, dificuldade, número de tentativas, quantidade de dicas, cronômetro e até o item
-secreto a dedo. O botão **Gerar desafio** cria um código (e um link) que carrega toda a configuração:
+Escolha categoria, dificuldade, número de tentativas, quantidade de dicas, palpites necessários por
+dica, cronômetro e até o item secreto a dedo. O botão **Gerar desafio** cria um código (e um link) que carrega toda a configuração:
 a turma inteira joga exatamente o mesmo item secreto. Quem recebe pode abrir o link direto ou colar o
 código no campo "Recebi um código de desafio".
 
@@ -219,16 +259,21 @@ assets/
       comparador.js            Compara palpite × segredo e devolve 🟩🟨🟥
       dicas.js                 Gera as dicas progressivas
       pontuacao.js             Fórmula de pontos
-      partida.js               Estado da partida e dificuldades
+      partida.js               Estado da partida, dificuldades e regra das dicas
       armazenamento.js         Perfil, histórico e ranking (localStorage)
       sugestoes.js             Modo "Eu gosto de"
       desafio.js               Codifica/decodifica desafios do professor
       efeitos.js               Sons sintetizados e confete em canvas
+      imagens.js               Foto e resumo do item secreto (Wikipédia)
     dados/                     BASE DE DADOS — é aqui que você expande o jogo
       entretenimento.js        Jogos, Filmes, Séries, Animes, Livros, Personagens
       pessoas.js               Músicos, Jogadores, Cientistas, Históricos, Artistas, Atores
       mundo.js                 Países, Lugares, Animais, Comidas, Esportes
       objetos.js               Carros, Empresas
+      expansao-telas.js        +Jogos, +Filmes, +Séries
+      expansao-ficcao.js       +Animes, +Livros, +Personagens
+      expansao-pessoas.js      +Músicos, +Jogadores, +Cientistas, +Históricos, +Artistas, +Atores
+      expansao-mundo.js        +Países, +Lugares, +Animais, +Comidas, +Esportes, +Carros, +Empresas
     ui/                        Interface, uma tela por arquivo
       comum.js, inicio.js, jogo.js, professor.js, ranking.js
     app.js                     Ponto de entrada
@@ -251,9 +296,18 @@ permite trocar o armazenamento local por uma API sem reescrever o jogo.
 
 ## Categorias incluídas
 
-🎮 Jogos · 🎬 Filmes · 📺 Séries · 🧙 Animes · 📚 Livros · 🦸 Personagens fictícios · 🎵 Músicos ·
-⚽ Jogadores · 🔬 Cientistas · 🏛️ Personalidades históricas · 🎨 Artistas · 🎭 Atores e atrizes ·
-🌎 Países · 🗺️ Lugares · 🐾 Animais · 🍔 Comidas · 🏀 Esportes · 🚗 Carros · 🏢 Empresas
+| Categoria | Itens | | Categoria | Itens |
+|---|---:|---|---|---:|
+| 🎵 Músicos | 136 | | 🌎 Países | 118 |
+| 🎮 Jogos | 128 | | ⚽ Jogadores | 115 |
+| 🎬 Filmes | 123 | | 🍔 Comidas | 108 |
+| 🦸 Personagens fictícios | 119 | | 🏢 Empresas | 105 |
+| 🏛️ Personalidades históricas | 103 | | 🐾 Animais | 101 |
+| 📚 Livros | 97 | | 🎭 Atores e atrizes | 94 |
+| 🔬 Cientistas | 92 | | 📺 Séries | 91 |
+| 🧙 Animes | 90 | | 🗺️ Lugares | 86 |
+| 🚗 Carros | 84 | | 🏀 Esportes | 80 |
+| 🎨 Artistas | 70 | | **Total** | **1.940** |
 
 ## Licença
 

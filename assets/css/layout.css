@@ -199,8 +199,9 @@ main {
 .dicas { display: grid; gap: .5rem; margin-top: 1.1rem; }
 
 /* -------------------------------------------------------- TABELA DE JOGO */
-.tabela-envolucro {
+.tabuleiro-envolucro {
   margin-top: 1.5rem;
+  padding: 1rem;
   overflow-x: auto;
   border: 1px solid var(--linha);
   border-radius: var(--raio-grande);

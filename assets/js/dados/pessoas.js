@@ -13,6 +13,7 @@
   /* -------------------------------------------------------------- MÚSICOS */
   GG.registrarTema({
     id: 'musicos',
+    contexto: 'música',
     nome: 'Músicos',
     emoji: '🎵',
     resumo: 'Bandas e artistas solo que mudaram a trilha sonora do mundo.',
@@ -52,6 +53,7 @@
   /* ------------------------------------------------------------ JOGADORES */
   GG.registrarTema({
     id: 'jogadores',
+    contexto: 'futebol',
     nome: 'Jogadores',
     emoji: '⚽',
     resumo: 'Craques do futebol mundial, de ontem e de hoje.',
@@ -91,6 +93,7 @@
   /* ------------------------------------------------------------ CIENTISTAS */
   GG.registrarTema({
     id: 'cientistas',
+    contexto: 'cientista',
     nome: 'Cientistas',
     emoji: '🔬',
     resumo: 'Quem formulou as perguntas — e algumas respostas — sobre o mundo.',
@@ -130,6 +133,7 @@
   /* ------------------------------------------ PERSONALIDADES HISTÓRICAS */
   GG.registrarTema({
     id: 'historicos',
+    contexto: 'história',
     nome: 'Personalidades históricas',
     emoji: '🏛️',
     resumo: 'Nomes que mudaram o rumo de países, impérios e ideias.',
@@ -170,6 +174,7 @@
   /* ------------------------------------------------------------- ARTISTAS */
   GG.registrarTema({
     id: 'artistas',
+    contexto: 'artista',
     nome: 'Artistas',
     emoji: '🎨',
     resumo: 'Pintores, escultores e grafiteiros de vários séculos.',
@@ -207,6 +212,7 @@
   /* ------------------------------------------------------ ATORES E ATRIZES */
   GG.registrarTema({
     id: 'atores',
+    contexto: 'ator atriz',
     nome: 'Atores e atrizes',
     emoji: '🎭',
     resumo: 'Quem dá rosto às histórias no cinema e na televisão.',

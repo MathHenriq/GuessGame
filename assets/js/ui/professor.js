@@ -42,6 +42,7 @@
       dificuldade: ui.$('#prof-dificuldade').value,
       tentativas: Math.max(3, Math.min(15, parseInt(ui.$('#prof-tentativas').value, 10) || 6)),
       dicasMax: Math.max(0, Math.min(6, parseInt(ui.$('#prof-dicas').value, 10) || 0)),
+      palpitesPorDica: Math.max(1, Math.min(5, parseInt(ui.$('#prof-requisito').value, 10) || 2)),
       cronometro: ui.$('#prof-cronometro').checked ? 1 : 0,
       itemId: ui.$('#prof-item').value || ''
     };
@@ -90,7 +91,8 @@
     caixa.appendChild(ui.el('p', 'sobretitulo', 'Desafio criado'));
     caixa.appendChild(ui.el('p', null,
       tema.emoji + ' ' + tema.nome + ' · ' + dificuldade.rotulo + ' · ' +
-      config.tentativas + ' tentativas · ' + config.dicasMax + ' dicas' +
+      config.tentativas + ' tentativas · ' + config.dicasMax + ' dicas a cada ' +
+      config.palpitesPorDica + ' palpites' +
       (config.cronometro ? ' · cronômetro ligado' : '') +
       (config.itemId ? ' · item escolhido a dedo' : '')));
 
@@ -125,6 +127,7 @@
       dificuldade: config.dificuldade,
       tentativas: config.tentativas,
       dicasMax: config.dicasMax,
+      palpitesPorDica: config.palpitesPorDica,
       cronometro: !!config.cronometro,
       itemId: config.itemId || null,
       codigo: codigo || true
@@ -152,6 +155,7 @@
       var dificuldade = GG.dificuldades[this.value];
       ui.$('#prof-tentativas').value = dificuldade.tentativas;
       ui.$('#prof-dicas').value = dificuldade.dicas;
+      ui.$('#prof-requisito').value = dificuldade.palpitesPorDica;
     });
 
     ui.$('#form-professor').addEventListener('submit', function (evento) {
