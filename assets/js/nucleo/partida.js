@@ -16,19 +16,19 @@
       id: 'facil', rotulo: 'Fácil', emoji: '🟢',
       descricao: 'A resposta é um dos 25 itens mais conhecidos.',
       tentativas: 8, dicas: 4, setas: true, palpitesPorDica: 2,
-      fatorTolerancia: 1.5, multiplicador: 0.8, limiteSorteio: 25
+      fatorTolerancia: 1.5, bonus: 0, limiteSorteio: 25
     },
     medio: {
       id: 'medio', rotulo: 'Médio', emoji: '🟡',
       descricao: 'A resposta sai dos 60 itens mais conhecidos.',
       tentativas: 7, dicas: 3, setas: true, palpitesPorDica: 2,
-      fatorTolerancia: 1, multiplicador: 1, limiteSorteio: 60
+      fatorTolerancia: 1, bonus: 15, limiteSorteio: 60
     },
     dificil: {
       id: 'dificil', rotulo: 'Difícil', emoji: '🔴',
       descricao: 'A resposta pode ser qualquer item, sem setas e com poucas dicas.',
       tentativas: 6, dicas: 2, setas: false, palpitesPorDica: 2,
-      fatorTolerancia: 0.5, multiplicador: 1.5, limiteSorteio: 0, segredoObscuro: true
+      fatorTolerancia: 0.5, bonus: 35, limiteSorteio: 0, segredoObscuro: true
     }
   };
 

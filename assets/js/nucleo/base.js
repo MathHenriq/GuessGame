@@ -226,6 +226,38 @@
     return tema;
   };
 
+  /**
+   * Acrescenta dicas escritas à mão a itens já cadastrados.
+   *
+   *   GG.adicionarDicas('pokemon', {
+   *     'Pikachu': 'Guarda eletricidade nas bochechas e é o mascote da série.'
+   *   });
+   *
+   * Fica separado das tuplas de propósito: a tupla descreve o item em
+   * colunas comparáveis, a dica é texto para o aluno ler. Assim dá para
+   * escrever dicas novas sem tocar na base de comparação — e o professor
+   * mexe num arquivo só (assets/js/dados/dicas-escritas.js).
+   *
+   * Regra ao escrever: a dica NÃO pode conter o nome do item.
+   * @returns {number} quantas dicas foram aplicadas
+   */
+  GG.adicionarDicas = function (temaId, mapa) {
+    var tema = GG.indiceTemas[temaId];
+    if (!tema) throw new Error('Tema desconhecido ao adicionar dicas: ' + temaId);
+
+    var porNome = {};
+    tema.itens.forEach(function (item) { porNome[item.busca] = item; });
+
+    var aplicadas = 0;
+    Object.keys(mapa).forEach(function (nome) {
+      var item = porNome[GG.normalizar(nome)];
+      if (!item) return; // item ainda não cadastrado: ignora sem quebrar o jogo
+      if (item.dicasAutorais.indexOf(mapa[nome]) === -1) item.dicasAutorais.push(mapa[nome]);
+      aplicadas++;
+    });
+    return aplicadas;
+  };
+
   // Junta nome + todos os valores textuais em uma lista de palavras-chave.
   GG.chavesDoItem = function (item, campos) {
     var chaves = [GG.normalizar(item.nome)];

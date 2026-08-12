@@ -441,9 +441,12 @@
 
     ui.$('#resultado-pontos').textContent = pontuacao.total;
 
+    // Extrato do placar: cada linha é uma parcela da soma, e a última fecha
+    // a conta. Assim o aluno confere de onde saiu cada ponto.
     var detalhes = ui.limpar(ui.$('#resultado-detalhes'));
     pontuacao.detalhes.forEach(function (item) {
       var linha = document.createElement('li');
+      if (item.destaque) linha.className = 'extrato__total';
       linha.appendChild(ui.el('span', null, item.rotulo));
       linha.appendChild(ui.el('span', null, String(item.valor)));
       detalhes.appendChild(linha);

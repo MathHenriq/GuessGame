@@ -58,8 +58,13 @@
     ui.iniciarTelaRanking();
 
     ligarNavegacao();
+    ui.atualizarPlacarTopo();
 
     if (!abrirDesafioDaURL()) ui.mostrarTela('inicio');
+
+    // Quem chega sem apelido escolhe um antes de jogar: é o que faz o
+    // ranking existir. Quem já escolheu antes entra direto.
+    if (!GG.perfil.temNome()) ui.pedirApelido();
 
     // Um desafio novo pode chegar enquanto a página já está aberta.
     window.addEventListener('hashchange', abrirDesafioDaURL);

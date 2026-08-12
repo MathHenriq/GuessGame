@@ -51,6 +51,7 @@ vm.createContext(contexto);
   'assets/js/dados/tema-cultura.js',
   'assets/js/dados/especificos-universos.js',
   'assets/js/dados/expansao-pokemon.js',
+  'assets/js/dados/dicas-escritas.js',
   'assets/js/dados/destaques.js'
 ].forEach(function (arquivo) {
   vm.runInContext(fs.readFileSync(path.join(raiz, arquivo), 'utf8'), contexto, { filename: arquivo });

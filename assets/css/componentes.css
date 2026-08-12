@@ -529,6 +529,72 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
   animation: surgir 200ms ease-out;
 }
 
+/* ------------------------------------------------- CAIXA DE APELIDO */
+.apelido {
+  width: min(460px, 100%);
+  display: grid;
+  gap: .9rem;
+  padding: 1.8rem;
+  background: var(--tinta-2);
+  border: 2px solid var(--linha-forte);
+  border-top: 6px solid var(--acento);
+  border-radius: var(--raio-grande);
+}
+
+.apelido__titulo {
+  font-family: var(--fonte-display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.apelido__texto { font-size: .9rem; color: var(--texto-suave); margin: 0; }
+
+.apelido__conhecidos { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
+
+.apelido__conhecidos-rotulo {
+  font-family: var(--fonte-mono);
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--texto-suave);
+  width: 100%;
+}
+
+.apelido__acoes { display: grid; }
+
+/* --------------------------------------------- JOGADOR DA VEZ NO TOPO */
+.jogador-topo {
+  display: grid;
+  gap: 0;
+  padding: .3rem .7rem;
+  text-align: left;
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  transition: border-color var(--transicao), background-color var(--transicao);
+}
+
+.jogador-topo:hover { border-color: var(--linha-forte); background: var(--tinta-3); }
+
+.jogador-topo__nome {
+  font-family: var(--fonte-display);
+  font-size: .85rem;
+  max-width: 11ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jogador-topo__troca {
+  font-family: var(--fonte-mono);
+  font-size: .58rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--texto-suave);
+}
+
 .resultado {
   position: relative;
   width: min(520px, 100%);
@@ -676,6 +742,18 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 .resultado__detalhes li { display: flex; justify-content: space-between; font-size: .82rem; color: var(--texto-suave); border-bottom: 1px dotted var(--linha); padding-bottom: .25rem; }
 .resultado__detalhes li span:last-child { font-family: var(--fonte-mono); color: var(--texto); }
 
+/* A linha que fecha a soma — o extrato precisa bater com o número grande. */
+.resultado__detalhes .extrato__total {
+  margin-top: .25rem;
+  padding-top: .45rem;
+  border-top: 1px solid var(--linha-forte);
+  border-bottom: none;
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.resultado__detalhes .extrato__total span:last-child { color: var(--acento); }
+
 .resultado__botoes { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
 
 /* ----------------------------------------------------------------- PÓDIO */
@@ -694,6 +772,68 @@ button.chip[aria-pressed="true"] { background: var(--acento); border-color: var(
 .podio__nome { font-family: var(--fonte-display); font-size: 1.1rem; text-transform: uppercase; }
 .podio__pontos { font-family: var(--fonte-display); font-size: 1.8rem; color: var(--acento); font-variant-numeric: tabular-nums; }
 .podio__detalhe { font-size: .78rem; color: var(--texto-suave); }
+
+/* --------------------------------------------------- TABELAS DE PLACAR */
+.placares {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.placar {
+  display: grid;
+  align-content: start;
+  gap: .6rem;
+  padding: 1.1rem;
+  background: var(--tinta-2);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+}
+
+.placar__titulo {
+  font-family: var(--fonte-display);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  margin: 0 0 .5rem;
+}
+
+.placar__nota { font-size: .82rem; color: var(--texto-suave); margin: -.4rem 0 0; }
+
+.tabela-placar { display: grid; gap: 2px; }
+
+.tabela-placar__linha {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto auto;
+  gap: .75rem;
+  align-items: center;
+  padding: .5rem .6rem;
+  border-radius: calc(var(--raio) - 4px);
+  font-size: .9rem;
+}
+
+.tabela-placar__linha--titulo {
+  font-family: var(--fonte-mono);
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--texto-suave);
+  padding-bottom: .2rem;
+}
+
+.tabela-placar__linha:not(.tabela-placar__linha--titulo):nth-child(odd) { background: var(--tinta-3); }
+
+/* A linha de quem está jogando fica marcada: acha-se de longe na projeção. */
+.tabela-placar__linha--eu {
+  background: color-mix(in srgb, var(--acento) 16%, transparent) !important;
+  box-shadow: inset 3px 0 0 var(--acento);
+}
+
+.tabela-placar__posicao { font-family: var(--fonte-mono); color: var(--texto-suave); }
+.tabela-placar__nome { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabela-placar__partidas { font-family: var(--fonte-mono); font-size: .72rem; color: var(--texto-suave); }
+.tabela-placar__pontos { font-family: var(--fonte-display); font-variant-numeric: tabular-nums; }
 
 /* ------------------------------------------------------------- HISTÓRICO */
 .historico__linha {

@@ -161,12 +161,26 @@ todas as dificuldades.
 
 ---
 
-## 4. Como transformar em plataforma com ranking
+## 4. Ranking, apelido e como virar plataforma
 
+### Como funciona hoje
+Ao entrar, o jogo pede um **apelido** — sem cadastro, sem senha, sem e-mail. Serve só para o placar
+saber de quem são os pontos, e fica gravado no aparelho. Quando a turma reveza no mesmo computador,
+o botão do apelido no topo troca de jogador, e cada apelido acumula a própria pontuação.
+
+Disso saem dois placares na aba **Ranking**:
+
+* **Classificação geral** — todos os apelidos do aparelho, somando todas as categorias;
+* **Por categoria** — quem manda em Pokémon, quem manda em Animais, escolhendo no seletor.
+
+A linha de quem está jogando fica destacada, o que ajuda quando a tela está projetada. O pódio usa
+os três maiores placares gerais, e o histórico mostra as últimas 40 partidas de todo mundo.
+
+### Virando plataforma
 Hoje o placar é local: fica no `localStorage` do navegador, por aparelho. A arquitetura já foi
 desenhada para a virada, e **todo o acesso a dados está isolado em um único arquivo**:
-`assets/js/nucleo/armazenamento.js`, que expõe `GG.perfil.obter()`, `definirNome()`,
-`registrarPartida()` e `limpar()`.
+`assets/js/nucleo/armazenamento.js`, que expõe `GG.perfil.obter()`, `atual()`, `definirNome()`,
+`listarJogadores()`, `rankingDoTema()`, `registrarPartida()` e `limpar()`.
 
 Caminho sugerido, do mais simples ao mais completo:
 
@@ -229,6 +243,8 @@ inteira, coisa que nenhum palpite isolado revela:
 
 | Família | O que diz | O que o aluno precisa fazer |
 |---|---|---|
+| **Pista** | a frase escrita à mão em `assets/js/dados/dicas-escritas.js`: "guarda eletricidade nas bochechas e virou o mascote da franquia" | reconhecer o item pela descrição, não pela coluna |
+| **Retrato falado** | as características mais amplas numa frase só: "carnívoro (dieta), médio (porte) e oceano (habitat)" | cruzar três colunas de uma vez com o tabuleiro |
 | **Corte** | o maior grupo a que o item **não** pertence: "Em Dieta, ele não é *Carnívoro* — isso elimina 60 dos 169 itens" | pensar por conjuntos: riscar um bloco inteiro de uma vez |
 | **Marco** | onde ele cai entre itens conhecidos: "na linha do tempo, fica entre *Pac-Man* e *Minecraft*" | estimar a data dos marcos — e chutá-los, porque o tabuleiro mostra os anos |
 | **Vizinho** | o item mais parecido da categoria e em quantas características eles batem | chutar o vizinho e caçar exatamente onde os dois se separam |
@@ -239,20 +255,35 @@ inteira, coisa que nenhum palpite isolado revela:
 | **Alfabeto** | metade do alfabeto, número de letras e de palavras | eliminar por formato do nome, antes de saber a letra |
 | **Dica final** | a letra inicial | a rede de segurança de sempre |
 
+As duas primeiras da fila são sempre as que falam **do item** (Pista e Retrato falado); as de
+estatística vêm depois, para quem já tem a descrição e ainda precisa estreitar o cerco. Isso
+importa porque o Difícil libera só duas dicas. Famílias que não se aplicam ao tema (Marco sem campo
+de ano, Origem sem campo de país) somem da fila, com as seguintes subindo no lugar.
+
 Nenhuma dica automática nomeia o item secreto nem entrega um valor exclusivo dele: elas fecham o
-cerco, quem fecha a conta é o aluno. A ordem vai da que mais elimina para a que menos elimina,
-porque o Difícil libera só duas — e famílias que não se aplicam ao tema (Marco sem campo de ano,
-Origem sem campo de país) somem da fila, com as seguintes subindo no lugar.
+cerco, quem fecha a conta é o aluno.
+
+**Para escrever dicas novas**, edite `assets/js/dados/dicas-escritas.js`:
+
+```js
+GG.adicionarDicas('pokemon', {
+  'Pikachu': 'Guarda eletricidade nas bochechas e virou o mascote da franquia.'
+});
+```
+
+Três regras: não cite o nome do item; descreva o que ele faz, de onde vem ou por que é conhecido
+(algo que não esteja em nenhuma coluna); e escreva uma frase curta, que a turma leia de longe.
+Item sem dica escrita não fica sem nada — o retrato falado é montado sozinho a partir das colunas.
 
 ### Dificuldades
 **O jogador sempre pode chutar qualquer item da categoria** — como no LoLdle, onde todo campeão é um
 palpite válido. A dificuldade muda apenas de onde sai a RESPOSTA:
 
-| Nível | A resposta sai de | Tentativas | Dicas | Setas | Multiplicador |
+| Nível | A resposta sai de | Tentativas | Dicas | Setas | Bônus |
 |---|---|---|---|---|---|
-| 🟢 Fácil | 25 itens mais conhecidos | 8 | 4 | sim | ×0,8 |
-| 🟡 Médio | 60 itens mais conhecidos | 7 | 3 | sim | ×1 |
-| 🔴 Difícil | qualquer item da categoria | 6 | 2 | não | ×1,5 |
+| 🟢 Fácil | 25 itens mais conhecidos | 8 | 4 | sim | +0 |
+| 🟡 Médio | 60 itens mais conhecidos | 7 | 3 | sim | +15 |
+| 🔴 Difícil | qualquer item da categoria | 6 | 2 | não | +35 |
 
 O ranking de "mais conhecidos" usa o campo de popularidade quando ele existe. Onde não existe
 (animais, países, carros, lugares…), vale a ordem de cadastro — e `assets/js/dados/destaques.js`
@@ -261,7 +292,7 @@ Se algum óbvio nunca cair como resposta, é lá que se acrescenta o nome.
 
 ### Pontuação
 ```
-pontos = (100 − tentativas extras × 12 − dicas × 15 + bônus de tempo) × multiplicador
+pontos = 100 − tentativas extras × 12 − dicas × 15 + bônus de dificuldade + bônus de tempo
 ```
 * acertou de primeira, sem dicas → **100 pontos**
 * acertou de primeira usando 3 dicas → **55 pontos**

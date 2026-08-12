@@ -94,10 +94,11 @@
 
   /* -------------------------------------------------------------- PLACAR */
   ui.atualizarPlacarTopo = function () {
-    var perfil = GG.perfil.obter();
-    ui.$('#placar-pontos').textContent = perfil.pontos;
+    var ficha = GG.perfil.atual();
+    ui.$('#placar-pontos').textContent = ficha.pontos;
+    ui.$('#jogador-nome').textContent = ficha.nome || 'Jogador';
     var sequencia = ui.$('#contador-sequencia');
-    if (sequencia) sequencia.textContent = perfil.sequencia;
+    if (sequencia) sequencia.textContent = ficha.sequencia;
   };
 
   /** Acima de 720px o layout é o de tablet/computador. */

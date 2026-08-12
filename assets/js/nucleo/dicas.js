@@ -369,6 +369,67 @@
     };
   }
 
+  /* --------------------------------------------------- 0. RETRATO FALADO
+     A dica que descreve o item, e não o funil.
+
+     As outras famílias estreitam o cerco por eliminação; esta diz de uma vez
+     o que a coisa É, juntando as características mais amplas do item numa
+     frase só. É a dica que um professor daria em voz alta ("é um mamífero
+     herbívoro de grande porte"), e a que mais resolve — por isso vale 15
+     pontos como qualquer outra e só sai depois dos palpites conquistados.
+
+     Usa as colunas de menor variedade, que são as que orientam sem entregar:
+     dizer "mamífero" num tema de 169 animais recorta muito e não nomeia
+     ninguém. Popularidade fica de fora: não descreve nada. */
+  function dicaDeRetrato(tema, item, estatisticas) {
+    var candidatos = [];
+
+    tema.campos.forEach(function (campo) {
+      if (!campoDeGrupo(campo)) return;
+      if (campo.escala === 'popularidade') return;
+
+      var valor = item.valores[campo.chave];
+      if (valor == null || valor === '') return;
+
+      var info = estatisticas.campos[campo.chave];
+      var variedade = info ? Object.keys(info.contagem).length : 99;
+      // Coluna quase única descreveria o item sozinha: não é retrato, é resposta.
+      if (variedade > Math.max(12, estatisticas.total * 0.25)) return;
+      // Coluna de sim/não não descreve nada ("não (lendário)") — fica para o Corte.
+      if (variedade < 3) return;
+
+      var descricao = Array.isArray(valor) ? valor[0] : GG.exibirValor(campo, valor);
+      // Alguns valores carregam o nome do item ("Exército de Freeza"): usar
+      // isso no retrato seria entregar a resposta de graça.
+      if (GG.normalizar(descricao).indexOf(item.busca) !== -1) return;
+
+      candidatos.push({
+        campo: campo,
+        ordem: tema.campos.indexOf(campo),
+        variedade: variedade,
+        texto: descricao
+      });
+    });
+
+    if (candidatos.length < 2) return null;
+
+    // Escolhe as mais amplas, mas escreve na ordem das colunas: lê melhor.
+    candidatos.sort(function (a, b) { return a.variedade - b.variedade; });
+    var escolhidos = candidatos.slice(0, 3)
+      .sort(function (a, b) { return a.ordem - b.ordem; });
+
+    var partes = escolhidos.map(function (c) {
+      return c.texto.toLowerCase() + ' (' + c.campo.rotulo.toLowerCase() + ')';
+    });
+    var ultima = partes.pop();
+
+    return {
+      rotulo: 'Retrato falado',
+      texto: 'Se alguém descrevesse sem dizer o nome: ' + partes.join(', ') +
+        ' e ' + ultima + '.'
+    };
+  }
+
   /* --------------------------------------------------------- 6. ALFABETO
      Antes de entregar a letra, entrega o formato do nome: metade do
      alfabeto, quantidade de letras e de palavras. Dá para eliminar muita
@@ -407,17 +468,19 @@
 
        Marco e Época dependem do mesmo campo: quando o Marco existe, o século
        vira dica tardia; quando não existe, o século assume o lugar dele. */
-    var dicas = [
-      cortes[0] ? dicaDeCorte(cortes[0], estatisticas) : null,
-      marco || epoca,
-      dicaDeVizinho(tema, item),
-      dicaDeGrupoRaro(tema, item, estatisticas)
-    ]
-      // A dica escrita à mão na base de dados, quando existe.
+    var dicas = []
+      /* Primeiro o que fala DO ITEM: a pista escrita à mão e o retrato
+         falado. São as que resolvem. As de estatística vêm depois, para
+         quem já tem o retrato e ainda precisa estreitar o cerco. */
       .concat(item.dicasAutorais.map(function (texto) {
         return { rotulo: 'Pista', texto: texto };
       }))
       .concat([
+        dicaDeRetrato(tema, item, estatisticas),
+        dicaDeVizinho(tema, item),
+        marco || epoca,
+        cortes[0] ? dicaDeCorte(cortes[0], estatisticas) : null,
+        dicaDeGrupoRaro(tema, item, estatisticas),
         dicaDeOrigem(tema, item),
         cortes[1] ? dicaDeCorte(cortes[1], estatisticas) : null,
         marco ? epoca : null

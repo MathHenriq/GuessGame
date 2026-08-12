@@ -99,7 +99,12 @@
         <button type="button" class="botao-icone" id="btn-visual" title="Alternar entre tema claro e escuro">
           <span data-visual-icone>🌙</span>
         </button>
-        <div class="placar-topo" id="placar-topo" title="Seus pontos acumulados">
+        <button type="button" class="jogador-topo" id="btn-trocar-jogador"
+          title="Trocar de jogador — os pontos vão para quem está aqui">
+          <span class="jogador-topo__nome" id="jogador-nome">Jogador</span>
+          <span class="jogador-topo__troca">trocar</span>
+        </button>
+        <div class="placar-topo" id="placar-topo" title="Pontos acumulados por este jogador">
           <span class="placar-topo__valor" id="placar-pontos">0</span>
           <span class="placar-topo__rotulo">pts</span>
         </div>
@@ -323,13 +328,33 @@
 
       <div class="identidade">
         <label class="campo">
-          <span class="campo__rotulo">Seu nome no placar</span>
+          <span class="campo__rotulo">Jogador da vez</span>
           <input class="entrada" type="text" id="entrada-nome" maxlength="24" placeholder="Ex.: Ana, 7º B">
         </label>
         <div class="identidade__resumo" id="resumo-perfil"></div>
       </div>
 
       <div class="podio" id="podio"></div>
+
+      <!-- Dois placares: o geral e o de uma categoria escolhida. -->
+      <div class="placares">
+        <div class="placar">
+          <h3 class="placar__titulo">Classificação geral</h3>
+          <p class="placar__nota">Soma de todas as categorias.</p>
+          <div class="tabela-placar" id="placar-geral"></div>
+        </div>
+
+        <div class="placar">
+          <h3 class="placar__titulo">Por categoria</h3>
+          <label class="campo">
+            <span class="campo__rotulo">Categoria</span>
+            <select class="entrada" id="seletor-placar-tema"></select>
+          </label>
+          <div class="tabela-placar" id="placar-tema"></div>
+        </div>
+      </div>
+
+      <h3 class="placar__titulo">Últimas partidas</h3>
       <div class="historico" id="historico"></div>
     </section>
   </main>
@@ -337,6 +362,34 @@
   <footer class="rodape">
     <p>Guess Game — projeto educativo aberto. Amplie a base de dados em <code>assets/js/dados/</code>.</p>
   </footer>
+
+  <!-- ============================================================= APELIDO
+       Pedido uma vez, ao entrar. Sem cadastro, sem senha, sem e-mail: só um
+       apelido para o placar saber de quem são os pontos. Fica gravado no
+       aparelho, e o botão do topo troca de jogador quando a turma reveza. -->
+  <div class="cortina cortina--apelido" id="cortina-apelido" hidden>
+    <form class="apelido" id="form-apelido" role="dialog" aria-modal="true" aria-labelledby="apelido-titulo">
+      <p class="sobretitulo">Antes de começar</p>
+      <h2 class="apelido__titulo" id="apelido-titulo">Como você quer aparecer no placar?</h2>
+      <p class="apelido__texto">
+        Escreva um apelido. Não tem cadastro nem senha — serve só para o ranking
+        saber de quem são os pontos. Se outra pessoa for jogar neste computador,
+        é só trocar o apelido no topo da tela.
+      </p>
+
+      <label class="campo">
+        <span class="campo__rotulo">Seu apelido</span>
+        <input class="entrada" type="text" id="entrada-apelido" maxlength="24"
+          placeholder="Ex.: Ana, Pedro 7B, Time Azul" autocomplete="off" required>
+      </label>
+
+      <div class="apelido__conhecidos" id="apelido-conhecidos" hidden></div>
+
+      <div class="apelido__acoes">
+        <button type="submit" class="botao botao--acento botao--grande">Começar a jogar</button>
+      </div>
+    </form>
+  </div>
 
   <!-- =========================================================== RESULTADO -->
   <div class="cortina" id="cortina" hidden>
@@ -402,6 +455,7 @@
   <script src="assets/js/dados/tema-cultura.js"></script>
   <script src="assets/js/dados/especificos-universos.js"></script>
   <script src="assets/js/dados/expansao-pokemon.js"></script>
+  <script src="assets/js/dados/dicas-escritas.js"></script>
   <!-- Destaques por último: reordena o que já foi cadastrado -->
   <script src="assets/js/dados/destaques.js"></script>
 
